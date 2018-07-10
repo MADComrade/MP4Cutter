@@ -17,7 +17,7 @@ void STSZ::parse(StreamReader &stream, uint32_t &startPos)
     uint32_t pos = startPos+OFFSET_TITLE;
     stream.setPos(pos);
     m_verFlag = stream.readUInt32();
-    m_sempleSize = stream.readBigEndianUInt32();
+    m_sampleSize = stream.readBigEndianUInt32();
     m_amountChunk = stream.readBigEndianUInt32();
     m_chunkSize.resize(m_amountChunk,0);
     for(auto i=0;i<m_amountChunk;i++){
@@ -31,7 +31,7 @@ void STSZ::writeAtom(StreamWriter &stream)
     stream.writeLitToBigEndian(m_size);
     stream.writeAtomName(STSZ_NAME);
     stream.writeUInt32(m_verFlag);
-    stream.writeLitToBigEndian(m_sempleSize);
+    stream.writeLitToBigEndian(m_sampleSize);
     stream.writeLitToBigEndian(m_chunkSize.size());
     for(int i=0;i<m_chunkSize.size();i++){
         stream.writeLitToBigEndian(m_chunkSize[i]);
