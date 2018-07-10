@@ -180,6 +180,76 @@ uint32_t SingletonSettings::getOffsetAudioChunk(double fractPos)
     }
 }
 
+uint32_t SingletonSettings::getSizeCut() const
+{
+    return m_sizeCut;
+}
+
+void SingletonSettings::setSizeCut(const uint32_t &sizeCut)
+{
+    m_sizeCut = sizeCut;
+}
+
+uint32_t SingletonSettings::getBeginOffsetFile() const
+{
+    return m_beginOffsetFile;
+}
+
+void SingletonSettings::setBeginOffsetFile(const uint32_t &beginOffsetFile)
+{
+    m_beginOffsetFile = beginOffsetFile;
+}
+
+uint32_t SingletonSettings::getLastChunkVideoSize() const
+{
+    return m_lastChunkVideoSize;
+}
+
+void SingletonSettings::setLastChunkVideoSize(const uint32_t &lastChunkVideoSize)
+{
+    m_lastChunkVideoSize = lastChunkVideoSize;
+}
+
+uint32_t SingletonSettings::getAmountChunkVideo() const
+{
+    return m_amountChunkVideo;
+}
+
+void SingletonSettings::setAmountChunkVideo(const uint32_t &amountChunkVideo)
+{
+    m_amountChunkVideo = amountChunkVideo;
+}
+
+uint32_t SingletonSettings::getAmountChunkAudio() const
+{
+    return m_amountChunkAudio;
+}
+
+void SingletonSettings::setAmountChunkAudio(const uint32_t &amountChunkAudio)
+{
+    m_amountChunkAudio = amountChunkAudio;
+}
+
+uint32_t SingletonSettings::getLastChunkAudioSize() const
+{
+    return m_lastChunkAudioSize;
+}
+
+void SingletonSettings::setLastChunkAudioSize(const uint32_t &lastChunkAudioSize)
+{
+    m_lastChunkAudioSize = lastChunkAudioSize;
+}
+
+uint32_t SingletonSettings::getFirstChunkAudioSize() const
+{
+    return m_firstChunkAudioSize;
+}
+
+void SingletonSettings::setFirstChunkAudioSize(const uint32_t &firstChunkAudioSize)
+{
+    m_firstChunkAudioSize = firstChunkAudioSize;
+}
+
 uint32_t SingletonSettings::getIdEndChunkWithIFrame() const
 {
     return m_idEndChunkWithIFrame;

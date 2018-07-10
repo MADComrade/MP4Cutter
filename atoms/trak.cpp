@@ -41,10 +41,10 @@ std::pair<uint32_t, uint32_t> TRAK::prepareData(uint32_t begTime, uint32_t endTi
 
 void TRAK::writeAtom(StreamWriter &stream)
 {
-    stream.writeLitToBigEndian(m_size);
-    stream.writeAtomName(TRAK_NAME);
-    m_tkhd->writeAtom(stream);
-    m_mdia->writeAtom(stream);
+        stream.writeLitToBigEndian(m_size);
+        stream.writeAtomName(TRAK_NAME);
+        m_tkhd->writeAtom(stream);
+        m_mdia->writeAtom(stream);
 }
 
 void TRAK::resizeAtom(uint32_t size, DIRECT_RESIZE direction)

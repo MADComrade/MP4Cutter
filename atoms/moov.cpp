@@ -67,19 +67,32 @@ void MOOV::parse(StreamReader &stream, uint32_t& startPos)
 // Пока только для подготовки к вырезанию видеофрагмента
 std::pair<uint32_t, uint32_t> MOOV::prepareData(uint32_t begTime, uint32_t endTime)
 {
-    m_size -=m_audioTrak->size();
-    m_mvhd->setNewDuration(SingletonSettings::getInstance().getNewDuration());
+    SingletonSettings& sing = SingletonSettings::getInstance();
+    m_mvhd->setNewDuration(sing.getNewDuration());
     std::pair<uint32_t, uint32_t> data = m_videoTrak->prepareData(begTime,endTime);
-    return data;
+    std::pair<uint32_t, uint32_t> data1 = m_audioTrak->prepareData(begTime,endTime);
+    return std::pair<uint32_t, uint32_t>(sing.getBeginOffsetFile(),sing.getSizeCut());
 }
 
 void MOOV::writeOnlyVideo(StreamWriter &outStream)
 {
+    m_size -=m_audioTrak->size();
     m_mvhd->setNextTrakID(2);
     outStream.writeLitToBigEndian(m_size);
     outStream.writeAtomName(MOOV_NAME);
     m_mvhd->writeAtom(outStream);
     m_videoTrak->writeAtom(outStream);
+}
+
+void MOOV::writeAudioAndVideo(StreamWriter &outStream)
+{
+    m_size -=m_videoTrak->size();
+    m_mvhd->setNextTrakID(2);
+    outStream.writeLitToBigEndian(m_size);
+    outStream.writeAtomName(MOOV_NAME);
+    m_mvhd->writeAtom(outStream);
+    //m_videoTrak->writeAtom(outStream);
+    m_audioTrak->writeAtom(outStream);
 }
 
 

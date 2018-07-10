@@ -38,6 +38,7 @@ void MP4Parser::prepareData(uint32_t begTime, uint32_t endTime)
 {
     SingletonSettings::getInstance().setPeriodTime(begTime,endTime);
     m_mdatInfo = m_moov->prepareData(begTime,endTime);
+    int a = 0;
     //return data;
 }
 
@@ -68,5 +69,5 @@ void MP4Parser::writeOnlyVideo(StreamReader &inStream, StreamWriter &outStream)
         outStream.write(reinterpret_cast< uint8_t * >(&( dataV[ 0 ] )), dataV.size());
     }
 
-    m_moov->writeOnlyVideo(outStream);
+    m_moov->writeAudioAndVideo(outStream);
 }

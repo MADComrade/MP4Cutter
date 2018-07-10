@@ -1,5 +1,7 @@
 #include "stco.h"
 #include "SingletonSettings.h"
+
+using namespace std;
 STCO::STCO():Atom(STCO_NAME, STCO_DIG_NAME)
 {
 
@@ -27,10 +29,10 @@ void STCO::parse(StreamReader &stream, uint32_t &startPos)
 
 void STCO::prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delta, TRAK_TYPE type)
 {
+    SingletonSettings& sing = SingletonSettings::getInstance();
     if(type == TRAK_TYPE::VIDEO){
-        SingletonSettings& sing = SingletonSettings::getInstance();
         sing.setArrayChunkOffsetVideo(m_chunkOffset);
-        uint32_t endPos = endTime*delta;
+        uint32_t endPos = (endTime*delta)+delta;
         uint32_t countResize = m_chunkOffset.size() - endPos + begTime;
         m_startCutOffset = m_chunkOffset[begTime];
         sing.setBeginOffsetVideo(m_startCutOffset);
@@ -42,19 +44,112 @@ void STCO::prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delt
         if(begTime > 0){
             m_chunkOffset.erase(m_chunkOffset.begin(),m_chunkOffset.begin()+begTime);
         }
-        uint32_t oldOffset = m_chunkOffset[0];
-        uint32_t tempOffset{0};
-        m_chunkOffset[0] = 40;
-        for(uint32_t i=1;i<m_chunkOffset.size();i++){
-            tempOffset = m_chunkOffset[i];
-            m_chunkOffset[i] =(m_chunkOffset[i] - oldOffset)+m_chunkOffset[i-1];
-            oldOffset = tempOffset;
-        }
+        //        uint32_t oldOffset = m_chunkOffset[0];
+        //        uint32_t tempOffset{0};
+        //        m_chunkOffset[0] = 40;
+        //        for(uint32_t i=1;i<m_chunkOffset.size();i++){
+        //            tempOffset = m_chunkOffset[i];
+        //            m_chunkOffset[i] =(m_chunkOffset[i] - oldOffset)+m_chunkOffset[i-1];
+        //            oldOffset = tempOffset;
+        //        }
         uint32_t resizeAmount = countResize*BYTE32; // ?
         m_size -=resizeAmount;
         resizeAtom(resizeAmount,DIRECT_RESIZE::DECREASED);
     }else{
+        pair<uint32_t,uint32_t> idStartData = sing.getStartIdChunkAudio();
+        pair<uint32_t,uint32_t> idEndData = sing.getEndIdChunkAudio();
+        uint32_t countResize = m_chunkOffset.size();
+        vector<uint32_t>& stcoVideoOffset = sing.getArrayChunkOffsetVideo();
 
+        if(idEndData.first < (m_chunkOffset.size()-1)){
+            m_chunkOffset.erase(m_chunkOffset.begin()+idEndData.first,m_chunkOffset.end());
+        }
+
+        if(idStartData.first > 0){
+            m_chunkOffset.erase(m_chunkOffset.begin(),m_chunkOffset.begin()+idStartData.first-1);
+        }
+        sing.setBeginOffsetAudio(m_chunkOffset[0]);
+        sing.setEndOffsetAudio(m_chunkOffset[m_chunkOffset.size()-1]);
+        uint32_t oldChunkOffset = m_chunkOffset[0];
+        uint32_t tempOffset{0};
+        uint32_t newChunkOffset = oldChunkOffset;// = m_chunkOffset[0]+sing.getFirstChunkAudioSize();
+        vector<uint32_t> testAudio;
+        vector<uint32_t> testVideo;
+        uint32_t oldVideoOffset = stcoVideoOffset[0];
+        sing.setBeginOffsetFile(oldChunkOffset);
+        if(oldChunkOffset<stcoVideoOffset[0]){
+            ///soun
+            for(uint32_t i=1;i<m_chunkOffset.size();i++){
+                testAudio.push_back(m_chunkOffset[i]-m_chunkOffset[i-1]);
+            }
+
+            m_chunkOffset[0] = 40;
+            for(uint32_t i=1;i<m_chunkOffset.size();i++){
+                tempOffset = m_chunkOffset[i];
+                m_chunkOffset[i] =testAudio[i-1]+m_chunkOffset[i-1];
+                newChunkOffset = tempOffset;
+            }
+
+            ///vide
+            for(uint32_t i=1;i<stcoVideoOffset.size();i++){
+                testVideo.push_back(stcoVideoOffset[i]-stcoVideoOffset[i-1]);
+            }
+            uint32_t oldChunkOffsetVideo = stcoVideoOffset[0];
+            stcoVideoOffset[0] = (stcoVideoOffset[0]-oldChunkOffset)+40;
+
+            for(uint32_t i=1;i<stcoVideoOffset.size();i++){
+                tempOffset = stcoVideoOffset[i];
+                stcoVideoOffset[i] =(stcoVideoOffset[i] - oldChunkOffsetVideo)+stcoVideoOffset[i-1];
+                oldChunkOffsetVideo = tempOffset;
+            }
+
+            uint32_t videoEndPart = sing.getOffsetVideo().second + sing.getLastChunkVideoSize();
+            uint32_t audioEndPart = sing.getOffsetAudio().second + sing.getLastChunkAudioSize();
+            if(videoEndPart>audioEndPart){
+                sing.setSizeCut(videoEndPart);
+            }else{
+                sing.setSizeCut(audioEndPart);
+            }
+        }else{
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///vide
+            ///
+            for(uint32_t i=1;i<stcoVideoOffset.size();i++){
+                testVideo.push_back(stcoVideoOffset[i]-stcoVideoOffset[i-1]);
+            }
+
+            uint32_t oldChunkOffsetVideo = stcoVideoOffset[0];
+            stcoVideoOffset[0] = 40;
+
+            for(uint32_t i=1;i<stcoVideoOffset.size();i++){
+                tempOffset = stcoVideoOffset[i];
+                stcoVideoOffset[i] =(stcoVideoOffset[i] - oldChunkOffsetVideo)+stcoVideoOffset[i-1];
+                oldChunkOffsetVideo = tempOffset;
+            }
+            ///soun
+            for(uint32_t i=1;i<m_chunkOffset.size();i++){
+                testAudio.push_back(m_chunkOffset[i]-m_chunkOffset[i-1]);
+            }
+
+            m_chunkOffset[0]=(m_chunkOffset[0]-oldVideoOffset)+40;
+            for(uint32_t i=1;i<m_chunkOffset.size();i++){
+                tempOffset = m_chunkOffset[i];
+                m_chunkOffset[i] =(m_chunkOffset[i] - newChunkOffset)+m_chunkOffset[i-1];
+                newChunkOffset = tempOffset;
+            }
+
+            uint32_t videoEndPart = sing.getOffsetVideo().second + sing.getLastChunkVideoSize();
+            uint32_t audioEndPart = sing.getOffsetAudio().second + sing.getLastChunkAudioSize();
+            if(videoEndPart>audioEndPart){
+                sing.setSizeCut(videoEndPart);
+            }else{
+                sing.setSizeCut(audioEndPart);
+            }
+        }
+
+        uint32_t resizeAmount = (countResize-m_chunkOffset.size())*BYTE32;
+        m_size -=resizeAmount;
+        resizeAtom(resizeAmount,DIRECT_RESIZE::DECREASED);
     }
 }
 

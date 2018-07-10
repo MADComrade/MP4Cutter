@@ -51,6 +51,7 @@ void STBL::parse(StreamReader &stream, uint32_t &startPos)
 
 std::pair<uint32_t, uint32_t> STBL::prepareData(uint32_t begTime, uint32_t endTime)
 {
+    SingletonSettings& sig = SingletonSettings::getInstance();
     if(m_trakType == TRAK_TYPE::VIDEO){
 
         m_stss->prepareDataForWrite(begTime,endTime);
@@ -60,11 +61,14 @@ std::pair<uint32_t, uint32_t> STBL::prepareData(uint32_t begTime, uint32_t endTi
 
         std::pair<uint32_t, uint32_t> dumpPos = m_stco->getOldOffset();
         dumpPos.second += m_stsz->getEndChunkSize();
-
+        sig.setEndOffsetVideo(dumpPos.second);
         return dumpPos;
 
     }else if(m_trakType == TRAK_TYPE::AUDIO){
-        /// TODO: AUDIO PREPARE
+        m_stsz->prepareDataForWrite(begTime,endTime, sig.getDeltaAudio(),m_trakType);
+        m_stco->prepareDataForWrite(begTime,endTime, sig.getDeltaAudio(),m_trakType);
+        m_stts->prepareDataForWrite(begTime,endTime, sig.getAmountChunkAudio(), m_trakType);
+        m_stsc->prepareDataForWrite(begTime,endTime, m_trakType);
     }else{
         exit(2);
     }
@@ -84,7 +88,11 @@ void STBL::writeAtom(StreamWriter &stream)
         m_stco->writeAtom(stream);
         m_stsz->writeAtom(stream);
     } else if(m_trakType == TRAK_TYPE::AUDIO){
-
+        m_stsc->writeAtom(stream);
+        m_stts->writeAtom(stream);
+        m_stsd->writeAtom(stream);
+        m_stco->writeAtom(stream);
+        m_stsz->writeAtom(stream);
     }
 }
 

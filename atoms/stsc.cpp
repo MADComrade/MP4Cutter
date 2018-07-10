@@ -1,5 +1,7 @@
 #include "stsc.h"
+#include "SingletonSettings.h"
 
+using namespace std;
 STSC::STSC():Atom(STSC_NAME, STSC_DIG_NAME)
 {
 	
@@ -32,7 +34,29 @@ void STSC::prepareDataForWrite(uint32_t begTime, uint32_t endTime, TRAK_TYPE typ
     uint32_t amountTime= endTime - begTime;
     if(type == TRAK_TYPE::VIDEO){
     }else{
-
+        SingletonSettings& sing = SingletonSettings::getInstance();
+        pair<uint32_t,uint32_t> idEndData = sing.getEndIdChunkAudio();
+        int32_t size = m_data.size();
+        if((m_data.size()==1)&&(idEndData.second>0))
+        {
+            m_amount++;
+            StscData oldData = m_data[0];
+            oldData.m_firstChunk = 1;
+            oldData.m_samplesPerChunk = idEndData.second;
+            oldData.m_samplesIndex = 1;
+            m_data.push_back(oldData);
+        }
+        int32_t resize = size - m_data.size();
+        if(resize == 0)
+            return;
+        uint32_t atomResize = (abs(size)*3*4);
+        if(resize<0){
+            m_size += atomResize;
+            resizeAtom(atomResize,DIRECT_RESIZE::INCREASED);
+        }else{
+            m_size -=atomResize;
+            resizeAtom(atomResize,DIRECT_RESIZE::DECREASED);
+        }
     }
 }
 
@@ -51,6 +75,6 @@ void STSC::writeAtom(StreamWriter &stream)
 
 void STSC::resizeAtom(uint32_t size, DIRECT_RESIZE direction)
 {
-
+    callback()->resizeAtom(size,direction);
 }
 

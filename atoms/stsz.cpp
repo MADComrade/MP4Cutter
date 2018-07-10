@@ -1,5 +1,7 @@
 #include "stsz.h"
+#include "SingletonSettings.h"
 
+using namespace std;
 STSZ::STSZ():Atom(STSZ_NAME, STSZ_DIG_NAME)
 {
 
@@ -40,9 +42,10 @@ void STSZ::writeAtom(StreamWriter &stream)
 
 void STSZ::prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delta, TRAK_TYPE type)
 {
+    SingletonSettings& sig = SingletonSettings::getInstance();
     //uint32_t amountTime= endTime - begTime;
     if(type == TRAK_TYPE::VIDEO){
-        uint32_t endPos = endTime*delta; /// TODO: Передать delta
+        uint32_t endPos = (endTime*delta)+delta; /// TODO: Передать delta
         uint32_t countResize = m_chunkSize.size() - endPos + begTime; ///?????
         if(endPos != (m_chunkSize.size()-1)){
             m_chunkSize.erase(m_chunkSize.begin()+endPos,m_chunkSize.end());
@@ -50,11 +53,44 @@ void STSZ::prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delt
         if(begTime != 0){
             m_chunkSize.erase(m_chunkSize.begin(),m_chunkSize.begin()+begTime);
         }
+        sig.setLastChunkVideoSize(m_chunkSize[m_chunkSize.size()-1]);
         uint32_t resizeAmount =countResize*BYTE32;
         m_size -=resizeAmount;
         resizeAtom(resizeAmount,DIRECT_RESIZE::DECREASED);
     }else{
 
+        pair<uint32_t,uint32_t> idStartData = sig.getStartIdChunkAudio();
+        pair<uint32_t,uint32_t> idEndData = sig.getEndIdChunkAudio();
+        idStartData.first *=4;
+        idEndData.first *=4;
+        uint32_t m_offsetStartSize{0};
+        uint32_t m_offsetEndSize{0};
+        if(idStartData.second != 0){
+            for(int i = idStartData.first; i<idStartData.first+idStartData.second;i++){
+                m_offsetStartSize += m_chunkSize[i];
+            }
+        }
+        sig.setFirstChunkAudioSize(m_offsetStartSize);
+        if(idEndData.second != 0){
+            for(int i = idEndData.first; i<idEndData.first+idEndData.second;i++){
+                m_offsetEndSize += m_chunkSize[i];
+            }
+        }
+        sig.setLastChunkAudioSize(m_offsetEndSize);
+        uint32_t endPos = idEndData.first+idEndData.second-2;
+        uint32_t startPos = idStartData.first-1;
+        uint32_t countResize = m_chunkSize.size();// - endPos + startPos; ///????? endPos +-1
+        if(idEndData.first != (m_chunkSize.size()-1)){
+            m_chunkSize.erase(m_chunkSize.begin()+idEndData.first+idEndData.second-2,m_chunkSize.end());
+        }
+        if(begTime != 0){
+            m_chunkSize.erase(m_chunkSize.begin(),m_chunkSize.begin()+idStartData.first-1); ///????? startPos +-1
+        }
+        sig.setAmountChunkAudio(m_chunkSize.size());
+        sig.setArrayChunkOffsetAudio(m_chunkSize);
+        uint32_t resizeAmount = (countResize-m_chunkSize.size())*BYTE32;
+        m_size -=resizeAmount;
+        resizeAtom(resizeAmount,DIRECT_RESIZE::DECREASED);
     }
 }
 
