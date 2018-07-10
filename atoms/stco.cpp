@@ -30,7 +30,7 @@ void STCO::prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delt
     if(type == TRAK_TYPE::VIDEO){
         SingletonSettings& sing = SingletonSettings::getInstance();
         sing.setArrayChunkOffsetVideo(m_chunkOffset);
-        uint32_t endPos = endTime*delta;
+        uint32_t endPos = (endTime*delta)+delta;
         uint32_t countResize = m_chunkOffset.size() - endPos + begTime;
         m_startCutOffset = m_chunkOffset[begTime];
         sing.setBeginOffsetVideo(m_startCutOffset);

@@ -31,18 +31,18 @@ void STSS::prepareDataForWrite(uint32_t begTime, uint32_t endTime, TRAK_TYPE typ
 {
     //uint32_t amountTime= endTime - begTime;
     if(type == TRAK_TYPE::VIDEO){
-        m_deltaIFrame = m_offsetIFrame[1]-m_offsetIFrame[0];
+        m_deltaIFrame = 25;//m_offsetIFrame[1]-m_offsetIFrame[0];
         uint32_t start = begTime*m_deltaIFrame; /// TODO: Передать delta
-        uint32_t finish = endTime*m_deltaIFrame;
+        uint32_t finish = (endTime*m_deltaIFrame)+m_deltaIFrame;
         uint32_t startPos, endPos;
         uint32_t countResize{0};
         for(uint32_t i=0;i<m_offsetIFrame.size();i++){
             if(start<m_offsetIFrame[i]){
-                startPos = i-1;
+                startPos = i;
                 break;
             }
             if(start == m_offsetIFrame[i]){
-                startPos = i;
+                startPos = i+1;
                 break;
             }
         }
@@ -60,12 +60,12 @@ void STSS::prepareDataForWrite(uint32_t begTime, uint32_t endTime, TRAK_TYPE typ
 
         m_startCutPos = m_offsetIFrame[startPos]-1;//-1;
         SingletonSettings::getInstance().setIDBeginChunkVideo(m_startCutPos);
-        countResize = m_offsetIFrame.size() - endPos + startPos;
+        countResize = m_offsetIFrame.size();// - endPos + startPos;
         if(endPos != (m_offsetIFrame.size()-1)){
             m_offsetIFrame.erase(m_offsetIFrame.begin()+(endPos-startPos),m_offsetIFrame.end());
         }
 
-        uint32_t resizeAmount = countResize*BYTE32;
+        uint32_t resizeAmount = (countResize-m_offsetIFrame.size())*BYTE32;
         m_size -=resizeAmount;
         resizeAtom(resizeAmount,DIRECT_RESIZE::DECREASED);
 

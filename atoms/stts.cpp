@@ -37,7 +37,7 @@ void STTS::prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delt
 {
     if(type == TRAK_TYPE::VIDEO){
         for(auto i=0;i<m_amount;i++){
-            m_data[i].m_sampleCount = (delta * endTime)- begTime;
+            m_data[i].m_sampleCount = (delta * endTime) + delta - begTime;
             m_newAmountChunk = m_data[i].m_sampleCount;
         }
     }else{
