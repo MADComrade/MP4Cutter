@@ -41,8 +41,8 @@ void STSC::prepareDataForWrite(uint32_t begTime, uint32_t endTime, TRAK_TYPE typ
         {
             m_amount++;
             StscData oldData = m_data[0];
-            oldData.m_firstChunk = 1;
-            oldData.m_samplesPerChunk = idEndData.second;
+            oldData.m_firstChunk = (sing.getIDEndChunkAudio()-sing.getIDBeginChunkAudio())+1;
+            oldData.m_samplesPerChunk = 2;//idEndData.second;
             oldData.m_samplesIndex = 1;
             m_data.push_back(oldData);
         }

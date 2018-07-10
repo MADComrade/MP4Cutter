@@ -14,7 +14,8 @@ int main(int argc, char *argv[])
     {
         MP4Parser parser;
         parser.parse(reader);
-        parser.prepareData(14,45);
+        //parser.prepareData(360,450);
+        parser.prepareData(15,45);
         StreamWriter writer("D:/newfile.mp4");
         if(writer.openStream()){
             parser.writeOnlyVideo(reader,writer);

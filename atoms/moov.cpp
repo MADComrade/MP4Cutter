@@ -86,12 +86,12 @@ void MOOV::writeOnlyVideo(StreamWriter &outStream)
 
 void MOOV::writeAudioAndVideo(StreamWriter &outStream)
 {
-    m_size -=m_videoTrak->size();
+    //m_size -=m_videoTrak->size();
     m_mvhd->setNextTrakID(2);
     outStream.writeLitToBigEndian(m_size);
     outStream.writeAtomName(MOOV_NAME);
     m_mvhd->writeAtom(outStream);
-    //m_videoTrak->writeAtom(outStream);
+    m_videoTrak->writeAtom(outStream);
     m_audioTrak->writeAtom(outStream);
 }
 

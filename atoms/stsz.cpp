@@ -61,8 +61,8 @@ void STSZ::prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delt
 
         pair<uint32_t,uint32_t> idStartData = sig.getStartIdChunkAudio();
         pair<uint32_t,uint32_t> idEndData = sig.getEndIdChunkAudio();
-        idStartData.first *=4;
-        idEndData.first *=4;
+        idStartData.first =idStartData.first*4-3;
+        idEndData.first =idEndData.first*4-3;
         uint32_t m_offsetStartSize{0};
         uint32_t m_offsetEndSize{0};
         if(idStartData.second != 0){

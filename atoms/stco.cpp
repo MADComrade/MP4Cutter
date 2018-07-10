@@ -76,8 +76,9 @@ void STCO::prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delt
         vector<uint32_t> testAudio;
         vector<uint32_t> testVideo;
         uint32_t oldVideoOffset = stcoVideoOffset[0];
-        sing.setBeginOffsetFile(oldChunkOffset);
+
         if(oldChunkOffset<stcoVideoOffset[0]){
+            sing.setBeginOffsetFile(oldChunkOffset);
             ///soun
             for(uint32_t i=1;i<m_chunkOffset.size();i++){
                 testAudio.push_back(m_chunkOffset[i]-m_chunkOffset[i-1]);
@@ -114,6 +115,7 @@ void STCO::prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delt
             ///////////////////////////////////////////////////////////////////////////////////////////
             ///vide
             ///
+            sing.setBeginOffsetFile(stcoVideoOffset[0]);
             for(uint32_t i=1;i<stcoVideoOffset.size();i++){
                 testVideo.push_back(stcoVideoOffset[i]-stcoVideoOffset[i-1]);
             }
