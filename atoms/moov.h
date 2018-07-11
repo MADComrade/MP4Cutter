@@ -15,8 +15,7 @@ public:
     MOOV();
     ~MOOV();
     virtual void parse(StreamReader& stream, uint32_t& startPos);
-    virtual std::pair<uint32_t, uint32_t> prepareData(uint32_t begTime, uint32_t endTime);
-    void writeOnlyVideo(StreamWriter& outStream);
+    std::pair<uint32_t, uint32_t> prepareData(uint32_t begTime, uint32_t endTime);
     void writeAudioAndVideo(StreamWriter& outStream);
 
 protected:

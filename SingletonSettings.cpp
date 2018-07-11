@@ -12,8 +12,8 @@ void SingletonSettings::setPeriodTime(uint32_t begTime, uint32_t endTime) {
     m_newDuration = endTime - begTime;
     m_idBeginChunkVideo = m_beginTime * m_deltaVideo;
     m_idEndChunkVideo = m_endTime * m_deltaVideo;
-    m_idBegChunkWithIFrame = m_beginTime * m_deltaIFrame;
-    m_idEndChunkWithIFrame = m_endTime * m_deltaIFrame;
+    m_idBegChunkWithIFrame = m_beginTime * m_delta;
+    m_idEndChunkWithIFrame = m_endTime * m_delta;
     double endIntPart;
     double startIntPart;
 
@@ -63,9 +63,9 @@ void SingletonSettings::setDeltaVideo(uint32_t delta) {
     m_deltaVideo = delta;
 }
 
-void SingletonSettings::setDeltaIFrame(uint32_t delta)
+void SingletonSettings::setDelta(uint32_t delta)
 {
-    m_deltaIFrame = delta;
+    m_delta = delta;
 }
 
 uint32_t SingletonSettings::getDeltaAudio() const {
@@ -76,9 +76,9 @@ uint32_t SingletonSettings::getDeltaVideo() const {
     return m_deltaVideo;
 }
 
-uint32_t SingletonSettings::getDeltaIFrame() const
+uint32_t SingletonSettings::getDelta() const
 {
-    return m_deltaIFrame;
+    return m_delta;
 }
 
 void SingletonSettings::setBeginOffsetAudio(uint32_t offset) {

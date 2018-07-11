@@ -11,11 +11,11 @@ public:
 
 	void setDeltaAudio(uint32_t delta);
 	void setDeltaVideo(uint32_t delta);
-    void setDeltaIFrame(uint32_t delta);
+    void setDelta(uint32_t delta);
 
     uint32_t getDeltaAudio() const;
     uint32_t getDeltaVideo() const;
-    uint32_t getDeltaIFrame() const;
+    uint32_t getDelta() const;
 
 	void setPeriodTime(uint32_t begTime, uint32_t endTime);
 
@@ -106,7 +106,7 @@ private:
 
     uint32_t	m_deltaAudio{ 0 };
     uint32_t	m_deltaVideo{ 0 };
-    uint32_t	m_deltaIFrame{ 0 };
+    uint32_t	m_delta{ 0 };
 
     uint32_t	m_beginOffsetAudio{ 0 };
     uint32_t	m_endOffsetAudio{ 0 };

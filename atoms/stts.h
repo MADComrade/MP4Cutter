@@ -6,12 +6,11 @@
 class STTS: public Atom
 {
 public:
-    STTS();
+    STTS(TRAK_TYPE type);
     ~STTS();
     virtual void parse(StreamReader& stream, uint32_t& startPos);
-    void prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delta, TRAK_TYPE type=TRAK_TYPE::VIDEO);
+    void prepareData();
     uint32_t newAmountChunk() const;
-    void setTrakType(TRAK_TYPE type);
     virtual void writeAtom(StreamWriter& stream);
 protected:
     virtual void resizeAtom(uint32_t size, DIRECT_RESIZE direction);
@@ -22,7 +21,7 @@ private:
     std::vector<SttsData> m_data;
 
     uint32_t m_newAmountChunk{0}; // пока 1, потом переделать на вектор
-    TRAK_TYPE m_type;
+    TRAK_TYPE m_trakType{TRAK_TYPE::VIDEO};
 };
 
 #endif // STTS_H

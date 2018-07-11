@@ -2,10 +2,12 @@
 #include <iomanip>
 #include <iostream>
 
-Atom::Atom(std::string atomTextName, uint32_t atomDigitName):ParserInterface(),CallbackInterface()
+Atom::Atom(std::string atomTextName, uint32_t atomDigitName):
+    ParserInterface(),
+    CallbackInterface(),
+    m_atomTextName(atomTextName),
+    m_atomDigitName(atomDigitName)
 {
-	setAtomTextName(atomTextName);
-    setAtomDigitName(atomDigitName);
 }
 
 Atom::~Atom()
@@ -51,11 +53,6 @@ void Atom::writeAtom(StreamWriter &stream)
 void Atom::setCallback(CallbackInterface *callback)
 {
     m_callback = callback;
-}
-
-std::pair<uint32_t, uint32_t> Atom::prepareData(uint32_t begTime, uint32_t endTime)
-{
-    return std::pair<uint32_t, uint32_t>(0,0);
 }
 
 void Atom::printAtomName(int lv)

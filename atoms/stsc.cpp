@@ -2,7 +2,9 @@
 #include "SingletonSettings.h"
 
 using namespace std;
-STSC::STSC():Atom(STSC_NAME, STSC_DIG_NAME)
+STSC::STSC(TRAK_TYPE type):
+    Atom(STSC_NAME, STSC_DIG_NAME),
+    m_trakType(type)
 {
 	
 }
@@ -29,19 +31,17 @@ void STSC::parse(StreamReader &stream, uint32_t &startPos)
     startPos +=m_size;
 }
 
-void STSC::prepareDataForWrite(uint32_t begTime, uint32_t endTime, TRAK_TYPE type)
+void STSC::prepareData()
 {
-    uint32_t amountTime= endTime - begTime;
-    if(type == TRAK_TYPE::VIDEO){
+    if(m_trakType == TRAK_TYPE::VIDEO){
     }else{
-        SingletonSettings& sing = SingletonSettings::getInstance();
-        pair<uint32_t,uint32_t> idEndData = sing.getEndIdChunkAudio();
+        pair<uint32_t,uint32_t> idEndData = m_singletonSettings.getEndIdChunkAudio();
         int32_t size = m_data.size();
         if((m_data.size()==1)&&(idEndData.second>0))
         {
             m_amount++;
             StscData oldData = m_data[0];
-            oldData.m_firstChunk = (sing.getIDEndChunkAudio()-sing.getIDBeginChunkAudio())+1;
+            oldData.m_firstChunk = (m_singletonSettings.getIDEndChunkAudio()-m_singletonSettings.getIDBeginChunkAudio())+1;
             oldData.m_samplesPerChunk = 2;//idEndData.second;
             oldData.m_samplesIndex = 1;
             m_data.push_back(oldData);

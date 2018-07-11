@@ -1,6 +1,5 @@
 #include "tkhd.h"
 #include <iomanip>
-#include "SingletonSettings.h"
 
 TKHD::TKHD():Atom(TKHD_NAME, TKHD_DIG_NAME)
 {
@@ -32,7 +31,7 @@ void TKHD::parse(StreamReader &stream, uint32_t &startPos)
 
 void TKHD::setNewDuration(uint32_t time)
 {
-    m_duration = time * SingletonSettings::getInstance().getTimeScaleVideo(); // для универсальности передавать time scale
+    m_duration = time * m_singletonSettings.getTimeScaleVideo(); // для универсальности передавать time scale
 }
 
 void TKHD::writeAtom(StreamWriter &stream)

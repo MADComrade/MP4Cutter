@@ -49,35 +49,35 @@ void STBL::parse(StreamReader &stream, uint32_t &startPos)
     startPos += m_size;
 }
 
-std::pair<uint32_t, uint32_t> STBL::prepareData(uint32_t begTime, uint32_t endTime)
+void STBL::prepareData()
 {
-    SingletonSettings& sig = SingletonSettings::getInstance();
+
+    uint32_t begTime = m_singletonSettings.getBeginTime();
+    uint32_t endTime = m_singletonSettings.getEndTime();
+
     if(m_trakType == TRAK_TYPE::VIDEO){
 
-        m_stss->prepareDataForWrite(begTime,endTime);
-        m_stsz->prepareDataForWrite(m_stss->startCutPos(),endTime, m_stss->getDeltaIFrame());
-        m_stco->prepareDataForWrite(m_stss->startCutPos(),endTime, m_stss->getDeltaIFrame());
-        m_stts->prepareDataForWrite(m_stss->startCutPos(),endTime, m_stss->getDeltaIFrame());
+        m_stss->prepareData();
+        m_stsz->prepareData();
+        m_stco->prepareData();
+        m_stts->prepareData();
 
         std::pair<uint32_t, uint32_t> dumpPos = m_stco->getOldOffset();
         dumpPos.second += m_stsz->getEndChunkSize();
-        sig.setEndOffsetVideo(dumpPos.second);
-        return dumpPos;
+        m_singletonSettings.setEndOffsetVideo(dumpPos.second);
 
     }else if(m_trakType == TRAK_TYPE::AUDIO){
-        m_stsz->prepareDataForWrite(begTime,endTime, sig.getDeltaAudio(),m_trakType);
-        m_stco->prepareDataForWrite(begTime,endTime, sig.getDeltaAudio(),m_trakType);
-        m_stts->prepareDataForWrite(begTime,endTime, sig.getAmountChunkAudio(), m_trakType);
-        m_stsc->prepareDataForWrite(begTime,endTime, m_trakType);
+        m_stsz->prepareData();
+        m_stco->prepareData();
+        m_stts->prepareData();
+        m_stsc->prepareData();
     }else{
         exit(2);
     }
-    return std::pair<uint32_t, uint32_t>(0,0);
 }
 
 void STBL::writeAtom(StreamWriter &stream)
 {
-    SingletonSettings& gig = SingletonSettings::getInstance();
     stream.writeLitToBigEndian(m_size);
     stream.writeAtomName(STBL_NAME);
     if(m_trakType == TRAK_TYPE::VIDEO){
@@ -110,12 +110,12 @@ void STBL::buildAndParseAtom(std::string atomName, StreamReader &stream, uint32_
 {
     switch (m_mapperAtomBuild[atomName]) {
     case STCO_DIG_NAME:
-        m_stco = make_unique<STCO>();
+        m_stco = make_unique<STCO>(m_trakType);
         m_stco->setCallback(this);
         m_stco->parse(stream,startPos);
         break;
     case STSC_DIG_NAME:
-        m_stsc = make_unique<STSC>();
+        m_stsc = make_unique<STSC>(m_trakType);
         m_stsc->setCallback(this);
         m_stsc->parse(stream,startPos);
         break;
@@ -125,19 +125,18 @@ void STBL::buildAndParseAtom(std::string atomName, StreamReader &stream, uint32_
         m_stsd->parse(stream,startPos);
         break;
     case STSZ_DIG_NAME:
-        m_stsz = make_unique<STSZ>();
+        m_stsz = make_unique<STSZ>(m_trakType);
         m_stsz->setCallback(this);
         m_stsz->parse(stream,startPos);
         break;
     case STSS_DIG_NAME:
-        m_stss = make_unique<STSS>();
+        m_stss = make_unique<STSS>(m_trakType);
         m_stss->setCallback(this);
         m_stss->parse(stream,startPos);
         break;
     case STTS_DIG_NAME:
-        m_stts = make_unique<STTS>();
+        m_stts = make_unique<STTS>(m_trakType);
         m_stts->setCallback(this);
-        m_stts->setTrakType(m_trakType);
         m_stts->parse(stream,startPos);
         break;
     default:

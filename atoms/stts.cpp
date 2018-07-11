@@ -1,7 +1,9 @@
 #include "stts.h"
 #include "SingletonSettings.h"
 
-STTS::STTS():Atom(STTS_NAME, STTS_DIG_NAME)
+STTS::STTS(TRAK_TYPE type):
+    Atom(STTS_NAME, STTS_DIG_NAME),
+    m_trakType(type)
 {
 
 }
@@ -24,25 +26,27 @@ void STTS::parse(StreamReader &stream, uint32_t &startPos)
         m_data[i].m_sampleCount=stream.readBigEndianUInt32();
         m_data[i].m_sampleDelta=stream.readBigEndianUInt32();
     }
-
-    if(m_type == TRAK_TYPE::VIDEO){
-        SingletonSettings::getInstance().setDeltaVideo(m_data[0].m_sampleDelta);
+    if(m_trakType == TRAK_TYPE::VIDEO){
+       m_singletonSettings.setDeltaVideo(m_data[0].m_sampleDelta);
     }else{
-        SingletonSettings::getInstance().setDeltaAudio(m_data[0].m_sampleDelta);
+        m_singletonSettings.setDeltaAudio(m_data[0].m_sampleDelta);
     }
     startPos +=m_size;
 }
 
-void STTS::prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delta, TRAK_TYPE type)
+void STTS::prepareData()
 {
-    if(type == TRAK_TYPE::VIDEO){
+    if(m_trakType == TRAK_TYPE::VIDEO){
+        uint32_t begTime = m_singletonSettings.getIDBeginChunkVideo();
+        uint32_t endTime = m_singletonSettings.getEndTime();
+        uint32_t delta = m_singletonSettings.getDelta();
         for(auto i=0;i<m_amount;i++){
             m_data[i].m_sampleCount = (delta * endTime) + delta - begTime;
             m_newAmountChunk = m_data[i].m_sampleCount;
         }
     }else{
         for(auto i=0;i<m_amount;i++){
-            m_data[i].m_sampleCount = delta;
+            m_data[i].m_sampleCount = m_singletonSettings.getAmountChunkAudio();
             m_newAmountChunk = m_data[i].m_sampleCount;
         }
     }
@@ -56,11 +60,6 @@ void STTS::resizeAtom(uint32_t size, DIRECT_RESIZE direction)
 uint32_t STTS::newAmountChunk() const
 {
     return m_newAmountChunk;
-}
-
-void STTS::setTrakType(TRAK_TYPE type)
-{
-    m_type = type;
 }
 
 void STTS::writeAtom(StreamWriter &stream)
