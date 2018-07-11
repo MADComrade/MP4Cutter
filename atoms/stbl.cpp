@@ -1,5 +1,4 @@
 #include "stbl.h"
-#include "SingletonSettings.h"
 
 using namespace std;
 

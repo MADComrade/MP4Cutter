@@ -1,5 +1,4 @@
 #include "stsz.h"
-#include "SingletonSettings.h"
 
 using namespace std;
 STSZ::STSZ(TRAK_TYPE type):

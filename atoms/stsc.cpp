@@ -1,5 +1,4 @@
 #include "stsc.h"
-#include "SingletonSettings.h"
 
 using namespace std;
 STSC::STSC(TRAK_TYPE type):

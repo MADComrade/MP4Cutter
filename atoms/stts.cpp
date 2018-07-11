@@ -1,5 +1,4 @@
 #include "stts.h"
-#include "SingletonSettings.h"
 
 STTS::STTS(TRAK_TYPE type):
     Atom(STTS_NAME, STTS_DIG_NAME),
