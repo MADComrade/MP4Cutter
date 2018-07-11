@@ -51,9 +51,6 @@ void STBL::parse(StreamReader &stream, uint32_t &startPos)
 void STBL::prepareData()
 {
 
-    uint32_t begTime = m_singletonSettings.getBeginTime();
-    uint32_t endTime = m_singletonSettings.getEndTime();
-
     if(m_trakType == TRAK_TYPE::VIDEO){
 
         m_stss->prepareData();

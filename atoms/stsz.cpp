@@ -48,8 +48,8 @@ void STSZ::prepareData()
         uint32_t endTime = m_singletonSettings.getEndTime();
         uint32_t delta = m_singletonSettings.getDelta();
 
-        uint32_t endPos = (endTime*delta)+delta; /// TODO: Передать delta
-        uint32_t countResize = m_chunkSize.size() - endPos + begTime; ///?????
+        uint32_t endPos = (endTime*delta)+delta;
+        uint32_t countResize = m_chunkSize.size();
         if(endPos != (m_chunkSize.size()-1)){
             m_chunkSize.erase(m_chunkSize.begin()+endPos,m_chunkSize.end());
         }
@@ -57,7 +57,7 @@ void STSZ::prepareData()
             m_chunkSize.erase(m_chunkSize.begin(),m_chunkSize.begin()+begTime);
         }
         m_singletonSettings.setLastChunkVideoSize(m_chunkSize[m_chunkSize.size()-1]);
-        uint32_t resizeAmount =countResize*BYTE32;
+        uint32_t resizeAmount =(countResize-m_chunkSize.size())*BYTE32;
         m_size -=resizeAmount;
         resizeAtom(resizeAmount,DIRECT_RESIZE::DECREASED);
 
