@@ -33,18 +33,18 @@ void TRAK::setTrakType(TRAK_TYPE type)
     m_type = type;
 }
 
-std::pair<uint32_t, uint32_t> TRAK::prepareData(uint32_t begTime, uint32_t endTime)
+void TRAK::prepareData()
 {
-    m_tkhd->setNewDuration(endTime-begTime);
-    return m_mdia->prepareData(begTime,endTime);
+    m_tkhd->setNewDuration(m_singletonSettings.getNewDuration());
+    m_mdia->prepareData();
 }
 
 void TRAK::writeAtom(StreamWriter &stream)
 {
-    stream.writeLitToBigEndian(m_size);
-    stream.writeAtomName(TRAK_NAME);
-    m_tkhd->writeAtom(stream);
-    m_mdia->writeAtom(stream);
+        stream.writeLitToBigEndian(m_size);
+        stream.writeAtomName(TRAK_NAME);
+        m_tkhd->writeAtom(stream);
+        m_mdia->writeAtom(stream);
 }
 
 void TRAK::resizeAtom(uint32_t size, DIRECT_RESIZE direction)

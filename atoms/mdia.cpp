@@ -7,8 +7,7 @@ MDIA::MDIA():Atom(MDIA_NAME, MDIA_DIG_NAME)
 {
     m_mdhd = make_unique<MDHD>();
     m_hdlr = make_unique<HDLR>();
-    m_minf = make_unique<MINF>();
-    m_minf->setCallback(this);
+
 }
 
 MDIA::~MDIA()
@@ -25,7 +24,8 @@ void MDIA::parse(StreamReader &stream, uint32_t &startPos)
     stream.setPos(pos);
     m_mdhd->parse(stream,pos);
     m_hdlr->parse(stream,pos);
-    m_minf->setTrakType(m_hdlr->getTrakType());
+    m_minf = make_unique<MINF>(m_hdlr->getTrakType());
+    m_minf->setCallback(this);
     m_mdhd->setTrakType(getTrakType());
     m_minf->parse(stream,pos);
     startPos += m_size;
@@ -36,10 +36,10 @@ TRAK_TYPE MDIA::getTrakType()
     return m_hdlr->getTrakType();
 }
 
-std::pair<uint32_t, uint32_t> MDIA::prepareData(uint32_t begTime, uint32_t endTime)
+void MDIA::prepareData()
 {
-    m_mdhd->setNewDuration(endTime-begTime);
-    return m_minf->prepareData(begTime,endTime);
+    m_mdhd->setNewDuration(m_singletonSettings.getNewDuration());
+    m_minf->prepareData();
 }
 
 void MDIA::writeAtom(StreamWriter &stream)

@@ -3,6 +3,7 @@
 #include "../interfaces/parserinterface.h"
 #include "../interfaces/callbackinterface.h"
 #include "../streamwriter.h"
+#include "../SingletonSettings.h"
 
 const std::string MOOV_NAME = "moov";
 const std::string MVHD_NAME = "mvhd";
@@ -90,7 +91,8 @@ public:
     virtual void parse(StreamReader& stream, uint32_t& startPos)=0;
     virtual void writeAtom(StreamWriter& stream);
     void setCallback(CallbackInterface *callback);
-    virtual std::pair<uint32_t, uint32_t> prepareData(uint32_t begTime, uint32_t endTime);
+    virtual void prepareData(){}
+
 protected:
     void printAtomName(int lv);
     void setOffset(const uint32_t &offset);
@@ -99,10 +101,12 @@ protected:
     CallbackInterface *callback() const;
     void setAtomDigitName(const uint32_t &atomDigitName);
     void setAtomTextName(const std::string &atomTextName);
+
     CallbackInterface* m_callback{nullptr};
     uint32_t m_offset{0};
     uint32_t m_size{0};
     uint32_t m_atomDigitName{0};
     std::string m_atomTextName{0};
+    SingletonSettings& m_singletonSettings{SingletonSettings::getInstance()};
 };
 #endif // ATOM_H

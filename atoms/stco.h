@@ -5,10 +5,10 @@
 class STCO:public Atom
 {
 public:
-    STCO();
+    STCO(TRAK_TYPE type);
     ~STCO();
     virtual void parse(StreamReader& stream, uint32_t& startPos);
-    void prepareDataForWrite(uint32_t begTime, uint32_t endTime, uint32_t delta,TRAK_TYPE type=TRAK_TYPE::VIDEO);
+    void prepareData();
     std::pair<uint32_t,uint32_t> getOldOffset() const;
     virtual void writeAtom(StreamWriter& stream);
 protected:
@@ -21,6 +21,7 @@ private:
 
     uint32_t m_startCutOffset{0};
     uint32_t m_endCutOffset{0};
+    TRAK_TYPE m_trakType{TRAK_TYPE::VIDEO};
 };
 
 #endif // STCO_H

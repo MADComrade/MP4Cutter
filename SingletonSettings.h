@@ -11,11 +11,11 @@ public:
 
 	void setDeltaAudio(uint32_t delta);
 	void setDeltaVideo(uint32_t delta);
-    void setDeltaIFrame(uint32_t delta);
+    void setDelta(uint32_t delta);
 
     uint32_t getDeltaAudio() const;
     uint32_t getDeltaVideo() const;
-    uint32_t getDeltaIFrame() const;
+    uint32_t getDelta() const;
 
 	void setPeriodTime(uint32_t begTime, uint32_t endTime);
 
@@ -69,6 +69,27 @@ public:
     uint32_t getIdBegChunkWithIFrame() const;
     uint32_t getIdEndChunkWithIFrame() const;
 
+    uint32_t getFirstChunkAudioSize() const;
+    void setFirstChunkAudioSize(const uint32_t &firstChunkAudioSize);
+
+    uint32_t getLastChunkAudioSize() const;
+    void setLastChunkAudioSize(const uint32_t &lastChunkAudioSize);
+
+    uint32_t getAmountChunkAudio() const;
+    void setAmountChunkAudio(const uint32_t &amountChunkAudio);
+
+    uint32_t getAmountChunkVideo() const;
+    void setAmountChunkVideo(const uint32_t &amountChunkVideo);
+
+    uint32_t getLastChunkVideoSize() const;
+    void setLastChunkVideoSize(const uint32_t &lastChunkVideoSize);
+
+    uint32_t getBeginOffsetFile() const;
+    void setBeginOffsetFile(const uint32_t &beginOffsetFile);
+
+    uint32_t getSizeCut() const;
+    void setSizeCut(const uint32_t &sizeCut);
+
 private:
     SingletonSettings() {}
     SingletonSettings(const SingletonSettings&) {}
@@ -85,13 +106,16 @@ private:
 
     uint32_t	m_deltaAudio{ 0 };
     uint32_t	m_deltaVideo{ 0 };
-    uint32_t	m_deltaIFrame{ 0 };
+    uint32_t	m_delta{ 0 };
 
     uint32_t	m_beginOffsetAudio{ 0 };
     uint32_t	m_endOffsetAudio{ 0 };
 
     uint32_t	m_beginOffsetVideo{ 0 };
     uint32_t	m_endOffsetVideo{ 0 };
+
+    uint32_t    m_beginOffsetFile{0};
+    uint32_t    m_sizeCut{0};
 
     uint32_t	m_idBeginChunkVideo{ 0 };
     uint32_t	m_idEndChunkVideo{ 0 };
@@ -100,6 +124,13 @@ private:
 
     uint32_t	m_idBeginChunkAudio{ 0 };
     uint32_t	m_idEndChunkAudio{ 0 };
+
+    uint32_t	m_firstChunkAudioSize{ 0 };
+    uint32_t	m_lastChunkAudioSize{ 0 };
+    uint32_t	m_lastChunkVideoSize{ 0 };
+
+    uint32_t	m_amountChunkAudio{ 0 };
+    uint32_t	m_amountChunkVideo{ 0 };
 
     uint32_t m_offsetStartAudioPos{0};
     uint32_t m_offsetEndtAudioPos{0};

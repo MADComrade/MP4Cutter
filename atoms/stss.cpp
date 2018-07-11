@@ -1,7 +1,9 @@
 #include "stss.h"
-#include "SingletonSettings.h"
 
-STSS::STSS():Atom(STSS_NAME, STSS_DIG_NAME)
+
+STSS::STSS(TRAK_TYPE type):
+    Atom(STSS_NAME, STSS_DIG_NAME),
+    m_trakType(type)
 {
 
 }
@@ -23,16 +25,17 @@ void STSS::parse(StreamReader &stream, uint32_t &startPos)
     for(auto i=0;i<m_amountChunk;i++){
         m_offsetIFrame[i]=stream.readBigEndianUInt32();
     }
-    SingletonSettings::getInstance().setDeltaIFrame(m_offsetIFrame[1]-m_offsetIFrame[0]);
+    m_singletonSettings.setDelta(m_singletonSettings.getDeltaVideo()+1);
     startPos +=m_size;
 }
 
-void STSS::prepareDataForWrite(uint32_t begTime, uint32_t endTime, TRAK_TYPE type)
+void STSS::prepareData()
 {
-    //uint32_t amountTime= endTime - begTime;
-    if(type == TRAK_TYPE::VIDEO){
-        m_deltaIFrame = 25;//m_offsetIFrame[1]-m_offsetIFrame[0];
-        uint32_t start = begTime*m_deltaIFrame; /// TODO: Передать delta
+    uint32_t begTime = m_singletonSettings.getBeginTime();
+    uint32_t endTime = m_singletonSettings.getEndTime();
+    if(m_trakType == TRAK_TYPE::VIDEO){
+        m_deltaIFrame = m_singletonSettings.getDelta();
+        uint32_t start = begTime*m_deltaIFrame;
         uint32_t finish = (endTime*m_deltaIFrame)+m_deltaIFrame;
         uint32_t startPos, endPos;
         uint32_t countResize{0};
@@ -48,19 +51,15 @@ void STSS::prepareDataForWrite(uint32_t begTime, uint32_t endTime, TRAK_TYPE typ
         }
 
         for(uint32_t i=startPos;i<m_offsetIFrame.size();i++){
-            if(finish<m_offsetIFrame[i]){
-                endPos = i;//-1;
-                break;
-            }
-            if(finish == m_offsetIFrame[i]){
+            if(finish<=m_offsetIFrame[i]){
                 endPos = i;
                 break;
             }
         }
 
         m_startCutPos = m_offsetIFrame[startPos]-1;//-1;
-        SingletonSettings::getInstance().setIDBeginChunkVideo(m_startCutPos);
-        countResize = m_offsetIFrame.size();// - endPos + startPos;
+        m_singletonSettings.setIDBeginChunkVideo(m_startCutPos);
+        countResize = m_offsetIFrame.size();
         if(endPos != (m_offsetIFrame.size()-1)){
             m_offsetIFrame.erase(m_offsetIFrame.begin()+(endPos-startPos),m_offsetIFrame.end());
         }

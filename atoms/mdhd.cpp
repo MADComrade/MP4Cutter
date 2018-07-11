@@ -1,5 +1,4 @@
 #include "mdhd.h"
-#include "SingletonSettings.h"
 
 MDHD::MDHD():Atom(MDHD_NAME, MDHD_DIG_NAME)
 {
@@ -36,7 +35,7 @@ void MDHD::setTrakType(TRAK_TYPE type)
 {
     m_type = type;
     if(type == TRAK_TYPE::AUDIO){
-        SingletonSettings::getInstance().setTimeScaleAudio(m_timeScale);
+        m_singletonSettings.setTimeScaleAudio(m_timeScale);
     }
 }
 

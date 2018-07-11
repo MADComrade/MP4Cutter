@@ -12,16 +12,16 @@ void SingletonSettings::setPeriodTime(uint32_t begTime, uint32_t endTime) {
     m_newDuration = endTime - begTime;
     m_idBeginChunkVideo = m_beginTime * m_deltaVideo;
     m_idEndChunkVideo = m_endTime * m_deltaVideo;
-    m_idBegChunkWithIFrame = m_beginTime * m_deltaIFrame;
-    m_idEndChunkWithIFrame = m_endTime * m_deltaIFrame;
+    m_idBegChunkWithIFrame = m_beginTime * m_delta;
+    m_idEndChunkWithIFrame = m_endTime * m_delta;
     double endIntPart;
     double startIntPart;
 
     double fractStartPos = modf(((begTime * static_cast<float>(m_timeScaleAudio))/m_deltaAudio)/4.0f,&startIntPart);
     double fractEndPos = modf(((endTime * static_cast<float>(m_timeScaleAudio))/m_deltaAudio)/4.0f,&endIntPart);
 
-    m_idBeginChunkAudio = static_cast<uint32_t>(startIntPart);
-    m_idEndChunkAudio = static_cast<uint32_t>(endIntPart);
+    m_idBeginChunkAudio = static_cast<uint32_t>(startIntPart)+3;
+    m_idEndChunkAudio = static_cast<uint32_t>(endIntPart)+3;
     m_offsetStartAudioPos = getOffsetAudioChunk(fractStartPos);
     m_offsetEndtAudioPos = getOffsetAudioChunk(fractEndPos);
 }
@@ -63,9 +63,9 @@ void SingletonSettings::setDeltaVideo(uint32_t delta) {
     m_deltaVideo = delta;
 }
 
-void SingletonSettings::setDeltaIFrame(uint32_t delta)
+void SingletonSettings::setDelta(uint32_t delta)
 {
-    m_deltaIFrame = delta;
+    m_delta = delta;
 }
 
 uint32_t SingletonSettings::getDeltaAudio() const {
@@ -76,9 +76,9 @@ uint32_t SingletonSettings::getDeltaVideo() const {
     return m_deltaVideo;
 }
 
-uint32_t SingletonSettings::getDeltaIFrame() const
+uint32_t SingletonSettings::getDelta() const
 {
-    return m_deltaIFrame;
+    return m_delta;
 }
 
 void SingletonSettings::setBeginOffsetAudio(uint32_t offset) {
@@ -178,6 +178,76 @@ uint32_t SingletonSettings::getOffsetAudioChunk(double fractPos)
     }else{
         return 3;
     }
+}
+
+uint32_t SingletonSettings::getSizeCut() const
+{
+    return m_sizeCut;
+}
+
+void SingletonSettings::setSizeCut(const uint32_t &sizeCut)
+{
+    m_sizeCut = sizeCut;
+}
+
+uint32_t SingletonSettings::getBeginOffsetFile() const
+{
+    return m_beginOffsetFile;
+}
+
+void SingletonSettings::setBeginOffsetFile(const uint32_t &beginOffsetFile)
+{
+    m_beginOffsetFile = beginOffsetFile;
+}
+
+uint32_t SingletonSettings::getLastChunkVideoSize() const
+{
+    return m_lastChunkVideoSize;
+}
+
+void SingletonSettings::setLastChunkVideoSize(const uint32_t &lastChunkVideoSize)
+{
+    m_lastChunkVideoSize = lastChunkVideoSize;
+}
+
+uint32_t SingletonSettings::getAmountChunkVideo() const
+{
+    return m_amountChunkVideo;
+}
+
+void SingletonSettings::setAmountChunkVideo(const uint32_t &amountChunkVideo)
+{
+    m_amountChunkVideo = amountChunkVideo;
+}
+
+uint32_t SingletonSettings::getAmountChunkAudio() const
+{
+    return m_amountChunkAudio;
+}
+
+void SingletonSettings::setAmountChunkAudio(const uint32_t &amountChunkAudio)
+{
+    m_amountChunkAudio = amountChunkAudio;
+}
+
+uint32_t SingletonSettings::getLastChunkAudioSize() const
+{
+    return m_lastChunkAudioSize;
+}
+
+void SingletonSettings::setLastChunkAudioSize(const uint32_t &lastChunkAudioSize)
+{
+    m_lastChunkAudioSize = lastChunkAudioSize;
+}
+
+uint32_t SingletonSettings::getFirstChunkAudioSize() const
+{
+    return m_firstChunkAudioSize;
+}
+
+void SingletonSettings::setFirstChunkAudioSize(const uint32_t &firstChunkAudioSize)
+{
+    m_firstChunkAudioSize = firstChunkAudioSize;
 }
 
 uint32_t SingletonSettings::getIdEndChunkWithIFrame() const

@@ -6,10 +6,10 @@
 class STSS:public Atom
 {
 public:
-    STSS();
+    STSS(TRAK_TYPE type);
     ~STSS();
     virtual void parse(StreamReader& stream, uint32_t& startPos);
-    void prepareDataForWrite(uint32_t begTime, uint32_t endTime, TRAK_TYPE type=TRAK_TYPE::VIDEO);
+    void prepareData();
     uint32_t getDeltaIFrame() const;
     uint32_t startCutPos() const;
     virtual void writeAtom(StreamWriter& stream);
@@ -23,6 +23,7 @@ private:
     uint32_t m_amountChunk{0};
     uint32_t m_startCutPos{0};
     uint32_t m_deltaIFrame{0};
+    TRAK_TYPE m_trakType{TRAK_TYPE::VIDEO};
 };
 
 #endif // STSS_H

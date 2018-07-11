@@ -3,12 +3,11 @@
 
 using namespace std;
 
-MINF::MINF():Atom(MINF_NAME, MINF_DIG_NAME)
+MINF::MINF(TRAK_TYPE type):
+    Atom(MINF_NAME, MINF_DIG_NAME),
+    m_trakType(type)
 {
     m_dinf = make_unique<DINF>();
-    m_stbl = make_unique<STBL>();
-    m_stbl->setCallback(this);
-    m_trakType = TRAK_TYPE::VIDEO;
 }
 
 MINF::~MINF()
@@ -16,10 +15,6 @@ MINF::~MINF()
 
 }
 
-void MINF::setTrakType(TRAK_TYPE type)
-{
-    m_trakType = type;
-}
 
 void MINF::parse(StreamReader &stream, uint32_t &startPos)
 {
@@ -37,15 +32,16 @@ void MINF::parse(StreamReader &stream, uint32_t &startPos)
     }else{
         exit(100);
     }
-    m_stbl->setTrakType(m_trakType);
     m_dinf->parse(stream,pos);
+    m_stbl = make_unique<STBL>(m_trakType);
+    m_stbl->setCallback(this);
     m_stbl->parse(stream,pos);
     startPos += m_size;
 }
 
-std::pair<uint32_t, uint32_t> MINF::prepareData(uint32_t begTime, uint32_t endTime)
+void MINF::prepareData()
 {
-    return m_stbl->prepareData(begTime,endTime);
+    m_stbl->prepareData();
 }
 
 void MINF::writeAtom(StreamWriter &stream)

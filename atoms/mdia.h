@@ -14,7 +14,7 @@ public:
     ~MDIA();
     virtual void parse(StreamReader& stream, uint32_t& startPos);
     TRAK_TYPE getTrakType();
-    virtual std::pair<uint32_t, uint32_t> prepareData(uint32_t begTime, uint32_t endTime);
+    virtual void prepareData();
     virtual void writeAtom(StreamWriter& stream);
 protected:
     virtual void resizeAtom(uint32_t size, DIRECT_RESIZE direction);

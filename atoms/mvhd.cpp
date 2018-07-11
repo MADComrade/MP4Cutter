@@ -1,5 +1,4 @@
 #include "mvhd.h"
-#include "SingletonSettings.h"
 
 MVHD::MVHD():Atom(MVHD_NAME, MVHD_DIG_NAME)
 {
@@ -23,7 +22,7 @@ void MVHD::parse(StreamReader &stream, uint32_t &startPos)
     m_creationTime = stream.readUInt32();
     m_modificationTime = stream.readUInt32();
     m_timeScale = stream.readBigEndianUInt32();
-    SingletonSettings::getInstance().setTimeScaleVideo(m_timeScale);
+    m_singletonSettings.setTimeScaleVideo(m_timeScale);
     m_duration = stream.readBigEndianUInt32();
     stream.read(&(m_data[0]),m_data.size());
     m_nextTrackID = stream.readBigEndianUInt32();
