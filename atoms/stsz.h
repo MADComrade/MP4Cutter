@@ -19,7 +19,7 @@ protected:
 private:
     std::vector<uint32_t> m_chunkSize;
     uint32_t m_verFlag{0};
-    uint32_t m_sempleSize{0};
+    uint32_t m_sampleSize{0};
     uint32_t m_amountChunk{0};
     uint32_t m_endChunkSize{0};
     TRAK_TYPE m_trakType{TRAK_TYPE::VIDEO};
