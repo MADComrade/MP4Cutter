@@ -102,6 +102,10 @@ void STCO::prepareData()
                 oldChunkOffsetVideo = tempOffset;
             }
 
+            if(idStartData.second !=0){
+                m_chunkOffset[0] +=m_singletonSettings.getFirstChunkAudioSize();
+            }
+
             uint32_t videoEndPart = m_singletonSettings.getOffsetVideo().second + m_singletonSettings.getLastChunkVideoSize();
             uint32_t audioEndPart = m_singletonSettings.getOffsetAudio().second + m_singletonSettings.getLastChunkAudioSize();
             if(videoEndPart>audioEndPart){
@@ -129,6 +133,10 @@ void STCO::prepareData()
                 tempOffset = m_chunkOffset[i];
                 m_chunkOffset[i] =(m_chunkOffset[i] - newChunkOffset)+m_chunkOffset[i-1];
                 newChunkOffset = tempOffset;
+            }
+
+            if(idStartData.second !=0){
+                m_chunkOffset[0] +=m_singletonSettings.getFirstChunkAudioSize();
             }
 
             uint32_t videoEndPart = m_singletonSettings.getOffsetVideo().second + m_singletonSettings.getLastChunkVideoSize();

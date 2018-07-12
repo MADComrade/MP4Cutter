@@ -85,10 +85,10 @@ void STSZ::prepareData()
         //uint32_t startPos = idStartData.first-1;
         uint32_t countResize = m_chunkSize.size();// - endPos + startPos; ///????? endPos +-1
         if(idEndData.first != (m_chunkSize.size()-1)){
-            m_chunkSize.erase(m_chunkSize.begin()+idEndData.first+idEndData.second-2,m_chunkSize.end());
+            m_chunkSize.erase(m_chunkSize.begin()+idEndData.first+idEndData.second,m_chunkSize.end());
         }
         if(idStartData.first != 0){
-            m_chunkSize.erase(m_chunkSize.begin(),m_chunkSize.begin()+idStartData.first-1); ///????? startPos +-1
+            m_chunkSize.erase(m_chunkSize.begin(),m_chunkSize.begin()+idStartData.first+idStartData.second-1); ///????? startPos +-1
         }
         m_singletonSettings.setAmountChunkAudio(m_chunkSize.size());
         m_singletonSettings.setArrayChunkOffsetAudio(m_chunkSize);
