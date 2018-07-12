@@ -1,153 +1,153 @@
-#ifndef SINGLETONSETTINGS_H
+п»ї#ifndef SINGLETONSETTINGS_H
 #define SINGLETONSETTINGS_H
 
 //////////////////////////////////////////////////////////////////////////////////////////
-//---------------------------ПОДКЛЮЧЕНИЕ ЗАГОЛОВОЧНЫХ ФАЙЛОВ----------------------------//
+//---------------------------РџРћР”РљР›Р®Р§Р•РќРР• Р—РђР“РћР›РћР’РћР§РќР«РҐ Р¤РђР™Р›РћР’----------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////
 #include <iostream>
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////////////////
-//---------------------------ОПРЕДЕЛЕНИЕ КЛАССОВ----------------------------------------//
+//---------------------------РћРџР Р•Р”Р•Р›Р•РќРР• РљР›РђРЎРЎРћР’----------------------------------------//
 //////////////////////////////////////////////////////////////////////////////////////////
 
 //**************************************************************************************//
-//---------------------------класс настройки на основе паттерна одиночка----------------//
+//---------------------------РєР»Р°СЃСЃ РЅР°СЃС‚СЂРѕР№РєРё РЅР° РѕСЃРЅРѕРІРµ РїР°С‚С‚РµСЂРЅР° РѕРґРёРЅРѕС‡РєР°----------------//
 class SingletonSettings {
 public:
 	//----------------------------------------------------------------------------------//
-	//----------------------------публичные методы--------------------------------------//
+	//----------------------------РїСѓР±Р»РёС‡РЅС‹Рµ РјРµС‚РѕРґС‹--------------------------------------//
 	//----------------------------------------------------------------------------------//
-	static SingletonSettings& getInstance();											// выдача объекта класса
+	static SingletonSettings& getInstance();											// РІС‹РґР°С‡Р° РѕР±СЉРµРєС‚Р° РєР»Р°СЃСЃР°
 
-	void setDeltaAudio(uint32_t delta);													// установка дельты времени аудио
-	void setDeltaVideo(uint32_t delta);													// установка дельты времени видео
-	void setDelta(uint32_t delta);														// установка дельты времени для ключевых кадров видео
+	void setDeltaAudio(uint32_t delta);													// СѓСЃС‚Р°РЅРѕРІРєР° РґРµР»СЊС‚С‹ РІСЂРµРјРµРЅРё Р°СѓРґРёРѕ
+	void setDeltaVideo(uint32_t delta);													// СѓСЃС‚Р°РЅРѕРІРєР° РґРµР»СЊС‚С‹ РІСЂРµРјРµРЅРё РІРёРґРµРѕ
+	void setDelta(uint32_t delta);														// СѓСЃС‚Р°РЅРѕРІРєР° РґРµР»СЊС‚С‹ РІСЂРµРјРµРЅРё РґР»СЏ РєР»СЋС‡РµРІС‹С… РєР°РґСЂРѕРІ РІРёРґРµРѕ
 
-	uint32_t getDeltaAudio() const;														// выдача дельты времени аудио
-	uint32_t getDeltaVideo() const;														// выдача дельты времени видео
-	uint32_t getDelta() const;															// выдача дельты времени для ключевых кадров видео
+	uint32_t getDeltaAudio() const;														// РІС‹РґР°С‡Р° РґРµР»СЊС‚С‹ РІСЂРµРјРµРЅРё Р°СѓРґРёРѕ
+	uint32_t getDeltaVideo() const;														// РІС‹РґР°С‡Р° РґРµР»СЊС‚С‹ РІСЂРµРјРµРЅРё РІРёРґРµРѕ
+	uint32_t getDelta() const;															// РІС‹РґР°С‡Р° РґРµР»СЊС‚С‹ РІСЂРµРјРµРЅРё РґР»СЏ РєР»СЋС‡РµРІС‹С… РєР°РґСЂРѕРІ РІРёРґРµРѕ
 
-	void setPeriodTime(uint32_t begTime, uint32_t endTime);								// установка промежутка времени обработки
+	void setPeriodTime(uint32_t begTime, uint32_t endTime);								// СѓСЃС‚Р°РЅРѕРІРєР° РїСЂРѕРјРµР¶СѓС‚РєР° РІСЂРµРјРµРЅРё РѕР±СЂР°Р±РѕС‚РєРё
 
-	void setTimeScaleAudio(uint32_t timeScale);											// установка коэффициента масштабирования аудио
-	void setTimeScaleVideo(uint32_t timeScale);											// установка коэффициента масштабирования видео
+	void setTimeScaleAudio(uint32_t timeScale);											// СѓСЃС‚Р°РЅРѕРІРєР° РєРѕСЌС„С„РёС†РёРµРЅС‚Р° РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёСЏ Р°СѓРґРёРѕ
+	void setTimeScaleVideo(uint32_t timeScale);											// СѓСЃС‚Р°РЅРѕРІРєР° РєРѕСЌС„С„РёС†РёРµРЅС‚Р° РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёСЏ РІРёРґРµРѕ
 
-	uint32_t getBeginTime();															// выдача времени начала обработки
-	uint32_t getEndTime();																// выдача времени окончания обработки
+	uint32_t getBeginTime();															// РІС‹РґР°С‡Р° РІСЂРµРјРµРЅРё РЅР°С‡Р°Р»Р° РѕР±СЂР°Р±РѕС‚РєРё
+	uint32_t getEndTime();																// РІС‹РґР°С‡Р° РІСЂРµРјРµРЅРё РѕРєРѕРЅС‡Р°РЅРёСЏ РѕР±СЂР°Р±РѕС‚РєРё
 
-	uint32_t getNewDuration() const;													// выдача продолжительности обработанного видео
+	uint32_t getNewDuration() const;													// РІС‹РґР°С‡Р° РїСЂРѕРґРѕР»Р¶РёС‚РµР»СЊРЅРѕСЃС‚Рё РѕР±СЂР°Р±РѕС‚Р°РЅРЅРѕРіРѕ РІРёРґРµРѕ
 
-	uint32_t getTimeScaleAudio();														// выдача коэффициента масштабирования аудио
-	uint32_t getTimeScaleVideo();														// выдача коэффициента масштабирования видео
+	uint32_t getTimeScaleAudio();														// РІС‹РґР°С‡Р° РєРѕСЌС„С„РёС†РёРµРЅС‚Р° РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёСЏ Р°СѓРґРёРѕ
+	uint32_t getTimeScaleVideo();														// РІС‹РґР°С‡Р° РєРѕСЌС„С„РёС†РёРµРЅС‚Р° РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёСЏ РІРёРґРµРѕ
 
-	void setBeginOffsetAudio(uint32_t offset);											// установка начального сдвига аудио
-	void setEndOffsetAudio(uint32_t offset);											// установка конечного сдвига аудио
+	void setBeginOffsetAudio(uint32_t offset);											// СѓСЃС‚Р°РЅРѕРІРєР° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ СЃРґРІРёРіР° Р°СѓРґРёРѕ
+	void setEndOffsetAudio(uint32_t offset);											// СѓСЃС‚Р°РЅРѕРІРєР° РєРѕРЅРµС‡РЅРѕРіРѕ СЃРґРІРёРіР° Р°СѓРґРёРѕ
 
-	void setBeginOffsetVideo(uint32_t offset);											// установка начального сдвига видео
-	void setEndOffsetVideo(uint32_t offset);											// установка конечного сдвига видео
+	void setBeginOffsetVideo(uint32_t offset);											// СѓСЃС‚Р°РЅРѕРІРєР° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ СЃРґРІРёРіР° РІРёРґРµРѕ
+	void setEndOffsetVideo(uint32_t offset);											// СѓСЃС‚Р°РЅРѕРІРєР° РєРѕРЅРµС‡РЅРѕРіРѕ СЃРґРІРёРіР° РІРёРґРµРѕ
 
-	std::pair<uint32_t, uint32_t> getOffsetAudio();										// выдача начального и конечного сдвига аудио
-	std::pair<uint32_t, uint32_t> getOffsetVideo();										// выдача начального и конечного сдвига видео
+	std::pair<uint32_t, uint32_t> getOffsetAudio();										// РІС‹РґР°С‡Р° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ Рё РєРѕРЅРµС‡РЅРѕРіРѕ СЃРґРІРёРіР° Р°СѓРґРёРѕ
+	std::pair<uint32_t, uint32_t> getOffsetVideo();										// РІС‹РґР°С‡Р° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ Рё РєРѕРЅРµС‡РЅРѕРіРѕ СЃРґРІРёРіР° РІРёРґРµРѕ
 
-	std::pair<uint32_t, uint32_t> getStartIdChunkAudio();								// выдача начального ID и сдвига аудио
-	std::pair<uint32_t, uint32_t> getEndIdChunkAudio();									// выдача конечного ID и сдвига аудио
+	std::pair<uint32_t, uint32_t> getStartIdChunkAudio();								// РІС‹РґР°С‡Р° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ ID Рё СЃРґРІРёРіР° Р°СѓРґРёРѕ
+	std::pair<uint32_t, uint32_t> getEndIdChunkAudio();									// РІС‹РґР°С‡Р° РєРѕРЅРµС‡РЅРѕРіРѕ ID Рё СЃРґРІРёРіР° Р°СѓРґРёРѕ
 
-	void setArrayChunkOffsetAudio(std::vector<uint32_t> &arrayChunkOffset);				// установка массива сдвигов чанков аудио
-	void setArrayChunkOffsetVideo(std::vector<uint32_t> &arrayChunkOffset);				// установка массива сдвигов чанков видео
+	void setArrayChunkOffsetAudio(std::vector<uint32_t> &arrayChunkOffset);				// СѓСЃС‚Р°РЅРѕРІРєР° РјР°СЃСЃРёРІР° СЃРґРІРёРіРѕРІ С‡Р°РЅРєРѕРІ Р°СѓРґРёРѕ
+	void setArrayChunkOffsetVideo(std::vector<uint32_t> &arrayChunkOffset);				// СѓСЃС‚Р°РЅРѕРІРєР° РјР°СЃСЃРёРІР° СЃРґРІРёРіРѕРІ С‡Р°РЅРєРѕРІ РІРёРґРµРѕ
 
-	std::vector<uint32_t>& getArrayChunkOffsetAudio();									// выдача массива сдвигов чанков аудио
-	std::vector<uint32_t>& getArrayChunkOffsetVideo();									// выдача массива сдвигов чанков видео
+	std::vector<uint32_t>& getArrayChunkOffsetAudio();									// РІС‹РґР°С‡Р° РјР°СЃСЃРёРІР° СЃРґРІРёРіРѕРІ С‡Р°РЅРєРѕРІ Р°СѓРґРёРѕ
+	std::vector<uint32_t>& getArrayChunkOffsetVideo();									// РІС‹РґР°С‡Р° РјР°СЃСЃРёРІР° СЃРґРІРёРіРѕРІ С‡Р°РЅРєРѕРІ РІРёРґРµРѕ
 
-	void setIDBeginChunkAudio(uint32_t idChunk);										// установка начального ID чанка аудио
-	void setIDEndChunkAudio(uint32_t idChunk);											// установка конечного ID чанка аудио
+	void setIDBeginChunkAudio(uint32_t idChunk);										// СѓСЃС‚Р°РЅРѕРІРєР° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ ID С‡Р°РЅРєР° Р°СѓРґРёРѕ
+	void setIDEndChunkAudio(uint32_t idChunk);											// СѓСЃС‚Р°РЅРѕРІРєР° РєРѕРЅРµС‡РЅРѕРіРѕ ID С‡Р°РЅРєР° Р°СѓРґРёРѕ
 
-	void setIDBeginChunkVideo(uint32_t idChunk);										// установка начального ID чанка видео
-	void setIDEndChunkVideo(uint32_t idChunk);											// установка конечного ID чанка видео
+	void setIDBeginChunkVideo(uint32_t idChunk);										// СѓСЃС‚Р°РЅРѕРІРєР° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ ID С‡Р°РЅРєР° РІРёРґРµРѕ
+	void setIDEndChunkVideo(uint32_t idChunk);											// СѓСЃС‚Р°РЅРѕРІРєР° РєРѕРЅРµС‡РЅРѕРіРѕ ID С‡Р°РЅРєР° РІРёРґРµРѕ
 
-	uint32_t getIDBeginChunkAudio();													// выдача начального ID чанка аудио
-	uint32_t getIDEndChunkAudio();														// выдача конечного ID чанка аудио
+	uint32_t getIDBeginChunkAudio();													// РІС‹РґР°С‡Р° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ ID С‡Р°РЅРєР° Р°СѓРґРёРѕ
+	uint32_t getIDEndChunkAudio();														// РІС‹РґР°С‡Р° РєРѕРЅРµС‡РЅРѕРіРѕ ID С‡Р°РЅРєР° Р°СѓРґРёРѕ
 
-	uint32_t getIDBeginChunkVideo();													// выдача начального ID чанка видео
-	uint32_t getIDEndChunkVideo();														// выдача конечного ID чанка видео
+	uint32_t getIDBeginChunkVideo();													// РІС‹РґР°С‡Р° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ ID С‡Р°РЅРєР° РІРёРґРµРѕ
+	uint32_t getIDEndChunkVideo();														// РІС‹РґР°С‡Р° РєРѕРЅРµС‡РЅРѕРіРѕ ID С‡Р°РЅРєР° РІРёРґРµРѕ
 
-	uint32_t getIdBegChunkWithIFrame() const;											// установка ID последнего чанка с ключевым кадром
-	uint32_t getIdEndChunkWithIFrame() const;											// выдача ID последнего чанка с ключевым кадром видео
+	uint32_t getIdBegChunkWithIFrame() const;											// СѓСЃС‚Р°РЅРѕРІРєР° ID РїРѕСЃР»РµРґРЅРµРіРѕ С‡Р°РЅРєР° СЃ РєР»СЋС‡РµРІС‹Рј РєР°РґСЂРѕРј
+	uint32_t getIdEndChunkWithIFrame() const;											// РІС‹РґР°С‡Р° ID РїРѕСЃР»РµРґРЅРµРіРѕ С‡Р°РЅРєР° СЃ РєР»СЋС‡РµРІС‹Рј РєР°РґСЂРѕРј РІРёРґРµРѕ
 
-	uint32_t getFirstChunkAudioSize() const;											// выдача размера первого чанка аудио
-	void setFirstChunkAudioSize(const uint32_t &firstChunkAudioSize);					// установка размера первого чанка аудио
+	uint32_t getFirstChunkAudioSize() const;											// РІС‹РґР°С‡Р° СЂР°Р·РјРµСЂР° РїРµСЂРІРѕРіРѕ С‡Р°РЅРєР° Р°СѓРґРёРѕ
+	void setFirstChunkAudioSize(const uint32_t &firstChunkAudioSize);					// СѓСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂР° РїРµСЂРІРѕРіРѕ С‡Р°РЅРєР° Р°СѓРґРёРѕ
 
-	uint32_t getLastChunkAudioSize() const;												// выдача размера последнего чанка аудио
-	void setLastChunkAudioSize(const uint32_t &lastChunkAudioSize);						// установка размера последнего чанка аудио
+	uint32_t getLastChunkAudioSize() const;												// РІС‹РґР°С‡Р° СЂР°Р·РјРµСЂР° РїРѕСЃР»РµРґРЅРµРіРѕ С‡Р°РЅРєР° Р°СѓРґРёРѕ
+	void setLastChunkAudioSize(const uint32_t &lastChunkAudioSize);						// СѓСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂР° РїРѕСЃР»РµРґРЅРµРіРѕ С‡Р°РЅРєР° Р°СѓРґРёРѕ
 
-	uint32_t getAmountChunkAudio() const;												// выдача кол-ва чанков аудио
-	void setAmountChunkAudio(const uint32_t &amountChunkAudio);							// установка кол-ва чанков аудио
+	uint32_t getAmountChunkAudio() const;												// РІС‹РґР°С‡Р° РєРѕР»-РІР° С‡Р°РЅРєРѕРІ Р°СѓРґРёРѕ
+	void setAmountChunkAudio(const uint32_t &amountChunkAudio);							// СѓСЃС‚Р°РЅРѕРІРєР° РєРѕР»-РІР° С‡Р°РЅРєРѕРІ Р°СѓРґРёРѕ
 
-	uint32_t getAmountChunkVideo() const;												// выдача кол-ва чанков видео
-	void setAmountChunkVideo(const uint32_t &amountChunkVideo);							// установка кол-ва чанков видео
+	uint32_t getAmountChunkVideo() const;												// РІС‹РґР°С‡Р° РєРѕР»-РІР° С‡Р°РЅРєРѕРІ РІРёРґРµРѕ
+	void setAmountChunkVideo(const uint32_t &amountChunkVideo);							// СѓСЃС‚Р°РЅРѕРІРєР° РєРѕР»-РІР° С‡Р°РЅРєРѕРІ РІРёРґРµРѕ
 
-	uint32_t getLastChunkVideoSize() const;												// выдача размера последнего чанка видео
-	void setLastChunkVideoSize(const uint32_t &lastChunkVideoSize);						// установка размера последнего чанка видео
+	uint32_t getLastChunkVideoSize() const;												// РІС‹РґР°С‡Р° СЂР°Р·РјРµСЂР° РїРѕСЃР»РµРґРЅРµРіРѕ С‡Р°РЅРєР° РІРёРґРµРѕ
+	void setLastChunkVideoSize(const uint32_t &lastChunkVideoSize);						// СѓСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂР° РїРѕСЃР»РµРґРЅРµРіРѕ С‡Р°РЅРєР° РІРёРґРµРѕ
 
-	uint32_t getBeginOffsetFile() const;												// установка размера вырезаемого видео
+	uint32_t getBeginOffsetFile() const;												// СѓСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂР° РІС‹СЂРµР·Р°РµРјРѕРіРѕ РІРёРґРµРѕ
 	void setBeginOffsetFile(const uint32_t &beginOffsetFile);							//
 
-	uint32_t getSizeCut() const;														// выдача размера вырезаемого видео
-	void setSizeCut(const uint32_t &sizeCut);											// установка размера вырезаемого видео
+	uint32_t getSizeCut() const;														// РІС‹РґР°С‡Р° СЂР°Р·РјРµСЂР° РІС‹СЂРµР·Р°РµРјРѕРіРѕ РІРёРґРµРѕ
+	void setSizeCut(const uint32_t &sizeCut);											// СѓСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂР° РІС‹СЂРµР·Р°РµРјРѕРіРѕ РІРёРґРµРѕ
 
 private:
 	//----------------------------------------------------------------------------------//
-	//----------------------------приватные методы--------------------------------------//
+	//----------------------------РїСЂРёРІР°С‚РЅС‹Рµ РјРµС‚РѕРґС‹--------------------------------------//
 	//----------------------------------------------------------------------------------//
-	SingletonSettings() {}																// конструктор
-	SingletonSettings(const SingletonSettings&) {}										// конструктор
-	SingletonSettings& operator=(SingletonSettings&) {}									// перегрузка оператора присваивания
+	SingletonSettings() {}																// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	SingletonSettings(const SingletonSettings&) {}										// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	SingletonSettings& operator=(SingletonSettings&) {}									// РїРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° РїСЂРёСЃРІР°РёРІР°РЅРёСЏ
 
-	uint32_t getOffsetAudioChunk(double fractPos);										// вычисление смещения чанка аудио
+	uint32_t getOffsetAudioChunk(double fractPos);										// РІС‹С‡РёСЃР»РµРЅРёРµ СЃРјРµС‰РµРЅРёСЏ С‡Р°РЅРєР° Р°СѓРґРёРѕ
 	//----------------------------------------------------------------------------------//
-	//----------------------------приватные атрибуты------------------------------------//
+	//----------------------------РїСЂРёРІР°С‚РЅС‹Рµ Р°С‚СЂРёР±СѓС‚С‹------------------------------------//
 	//----------------------------------------------------------------------------------//
-	uint32_t    m_beginTime{ 0 };														// время начала обработки
-	uint32_t	m_endTime{ 0 };															// время конца обработки
+	uint32_t    m_beginTime{ 0 };														// РІСЂРµРјСЏ РЅР°С‡Р°Р»Р° РѕР±СЂР°Р±РѕС‚РєРё
+	uint32_t	m_endTime{ 0 };															// РІСЂРµРјСЏ РєРѕРЅС†Р° РѕР±СЂР°Р±РѕС‚РєРё
 
-	uint32_t	m_newDuration{ 0 };														// продолжительность выходного видео
+	uint32_t	m_newDuration{ 0 };														// РїСЂРѕРґРѕР»Р¶РёС‚РµР»СЊРЅРѕСЃС‚СЊ РІС‹С…РѕРґРЅРѕРіРѕ РІРёРґРµРѕ
 
-	uint32_t	m_timeScaleVideo{ 0 };;													// масштабирование видео
-	uint32_t	m_timeScaleAudio{ 0 };													// масштабирование аудио
+	uint32_t	m_timeScaleVideo{ 0 };;													// РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ РІРёРґРµРѕ
+	uint32_t	m_timeScaleAudio{ 0 };													// РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ Р°СѓРґРёРѕ
 
-	uint32_t	m_deltaAudio{ 0 };														// дельта аудио
-	uint32_t	m_deltaVideo{ 0 };														// дельта видео
-	uint32_t	m_delta{ 0 };															// дельта ключевого кадра видео 
+	uint32_t	m_deltaAudio{ 0 };														// РґРµР»СЊС‚Р° Р°СѓРґРёРѕ
+	uint32_t	m_deltaVideo{ 0 };														// РґРµР»СЊС‚Р° РІРёРґРµРѕ
+	uint32_t	m_delta{ 0 };															// РґРµР»СЊС‚Р° РєР»СЋС‡РµРІРѕРіРѕ РєР°РґСЂР° РІРёРґРµРѕ 
 
-	uint32_t	m_beginOffsetAudio{ 0 };												// начальный сдвиг аудио
-	uint32_t	m_endOffsetAudio{ 0 };													// конечный сдвиг аудио
+	uint32_t	m_beginOffsetAudio{ 0 };												// РЅР°С‡Р°Р»СЊРЅС‹Р№ СЃРґРІРёРі Р°СѓРґРёРѕ
+	uint32_t	m_endOffsetAudio{ 0 };													// РєРѕРЅРµС‡РЅС‹Р№ СЃРґРІРёРі Р°СѓРґРёРѕ
 
-	uint32_t	m_beginOffsetVideo{ 0 };												// начальный сдвиг видео
-	uint32_t	m_endOffsetVideo{ 0 };													// конечный сдвиг видео
+	uint32_t	m_beginOffsetVideo{ 0 };												// РЅР°С‡Р°Р»СЊРЅС‹Р№ СЃРґРІРёРі РІРёРґРµРѕ
+	uint32_t	m_endOffsetVideo{ 0 };													// РєРѕРЅРµС‡РЅС‹Р№ СЃРґРІРёРі РІРёРґРµРѕ
 
-	uint32_t    m_beginOffsetFile{ 0 };													// сдвиг отнсительно начала файла для вырезания
-	uint32_t    m_sizeCut{ 0 };															// размер выходного видео
+	uint32_t    m_beginOffsetFile{ 0 };													// СЃРґРІРёРі РѕС‚РЅСЃРёС‚РµР»СЊРЅРѕ РЅР°С‡Р°Р»Р° С„Р°Р№Р»Р° РґР»СЏ РІС‹СЂРµР·Р°РЅРёСЏ
+	uint32_t    m_sizeCut{ 0 };															// СЂР°Р·РјРµСЂ РІС‹С…РѕРґРЅРѕРіРѕ РІРёРґРµРѕ
 
-	uint32_t	m_idBeginChunkVideo{ 0 };												// ID чанка видео на начало обработки
-	uint32_t	m_idEndChunkVideo{ 0 };													// ID чанка видео на конец обработки
-	uint32_t	m_idBegChunkWithIFrame{ 0 };											// ID чанка ключевого кадра видео на начало обработки
-	uint32_t	m_idEndChunkWithIFrame{ 0 };											// ID чанка ключевого кадра видео на конец обработки 
+	uint32_t	m_idBeginChunkVideo{ 0 };												// ID С‡Р°РЅРєР° РІРёРґРµРѕ РЅР° РЅР°С‡Р°Р»Рѕ РѕР±СЂР°Р±РѕС‚РєРё
+	uint32_t	m_idEndChunkVideo{ 0 };													// ID С‡Р°РЅРєР° РІРёРґРµРѕ РЅР° РєРѕРЅРµС† РѕР±СЂР°Р±РѕС‚РєРё
+	uint32_t	m_idBegChunkWithIFrame{ 0 };											// ID С‡Р°РЅРєР° РєР»СЋС‡РµРІРѕРіРѕ РєР°РґСЂР° РІРёРґРµРѕ РЅР° РЅР°С‡Р°Р»Рѕ РѕР±СЂР°Р±РѕС‚РєРё
+	uint32_t	m_idEndChunkWithIFrame{ 0 };											// ID С‡Р°РЅРєР° РєР»СЋС‡РµРІРѕРіРѕ РєР°РґСЂР° РІРёРґРµРѕ РЅР° РєРѕРЅРµС† РѕР±СЂР°Р±РѕС‚РєРё 
 
-	uint32_t	m_idBeginChunkAudio{ 0 };												// ID чанка аудио на начало обработки
-	uint32_t	m_idEndChunkAudio{ 0 };													// ID чанка аудио на конец обработки
+	uint32_t	m_idBeginChunkAudio{ 0 };												// ID С‡Р°РЅРєР° Р°СѓРґРёРѕ РЅР° РЅР°С‡Р°Р»Рѕ РѕР±СЂР°Р±РѕС‚РєРё
+	uint32_t	m_idEndChunkAudio{ 0 };													// ID С‡Р°РЅРєР° Р°СѓРґРёРѕ РЅР° РєРѕРЅРµС† РѕР±СЂР°Р±РѕС‚РєРё
 
-	uint32_t	m_firstChunkAudioSize{ 0 };												// размер первого чанка аудио
-	uint32_t	m_lastChunkAudioSize{ 0 };												// размер последнего чанка аудио
-	uint32_t	m_lastChunkVideoSize{ 0 };												// размер первого чанка видео
+	uint32_t	m_firstChunkAudioSize{ 0 };												// СЂР°Р·РјРµСЂ РїРµСЂРІРѕРіРѕ С‡Р°РЅРєР° Р°СѓРґРёРѕ
+	uint32_t	m_lastChunkAudioSize{ 0 };												// СЂР°Р·РјРµСЂ РїРѕСЃР»РµРґРЅРµРіРѕ С‡Р°РЅРєР° Р°СѓРґРёРѕ
+	uint32_t	m_lastChunkVideoSize{ 0 };												// СЂР°Р·РјРµСЂ РїРµСЂРІРѕРіРѕ С‡Р°РЅРєР° РІРёРґРµРѕ
 
-	uint32_t	m_amountChunkAudio{ 0 };												// кол-во чанков аудио 
-	uint32_t	m_amountChunkVideo{ 0 };												// кол-во чанков видео
+	uint32_t	m_amountChunkAudio{ 0 };												// РєРѕР»-РІРѕ С‡Р°РЅРєРѕРІ Р°СѓРґРёРѕ 
+	uint32_t	m_amountChunkVideo{ 0 };												// РєРѕР»-РІРѕ С‡Р°РЅРєРѕРІ РІРёРґРµРѕ
 
-	uint32_t m_offsetStartAudioPos{ 0 };												// сдвиг позиции начала аудио
-	uint32_t m_offsetEndtAudioPos{ 0 };													// сдвиг позиции конца аудио
+	uint32_t m_offsetStartAudioPos{ 0 };												// СЃРґРІРёРі РїРѕР·РёС†РёРё РЅР°С‡Р°Р»Р° Р°СѓРґРёРѕ
+	uint32_t m_offsetEndtAudioPos{ 0 };													// СЃРґРІРёРі РїРѕР·РёС†РёРё РєРѕРЅС†Р° Р°СѓРґРёРѕ
 
-	std::vector<uint32_t>* pm_chunkOffsetAudio{ nullptr };								// массив сдвигов аудио из stco
-	std::vector<uint32_t>* pm_chunkOffsetVideo{ nullptr };								// массив сдвигов видео из stco
+	std::vector<uint32_t>* pm_chunkOffsetAudio{ nullptr };								// РјР°СЃСЃРёРІ СЃРґРІРёРіРѕРІ Р°СѓРґРёРѕ РёР· stco
+	std::vector<uint32_t>* pm_chunkOffsetVideo{ nullptr };								// РјР°СЃСЃРёРІ СЃРґРІРёРіРѕРІ РІРёРґРµРѕ РёР· stco
 };
 
 #endif
