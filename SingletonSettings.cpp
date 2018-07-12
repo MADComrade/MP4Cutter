@@ -20,8 +20,8 @@ void SingletonSettings::setPeriodTime(uint32_t begTime, uint32_t endTime) {
     double fractStartPos = modf(((begTime * static_cast<float>(m_timeScaleAudio))/m_deltaAudio)/4.0f,&startIntPart);
     double fractEndPos = modf(((endTime * static_cast<float>(m_timeScaleAudio))/m_deltaAudio)/4.0f,&endIntPart);
 
-    m_idBeginChunkAudio = static_cast<uint32_t>(startIntPart)+3;
-    m_idEndChunkAudio = static_cast<uint32_t>(endIntPart)+3;
+    m_idBeginChunkAudio = static_cast<uint32_t>(startIntPart)+2;
+    m_idEndChunkAudio = static_cast<uint32_t>(endIntPart)+2;
     m_offsetStartAudioPos = getOffsetAudioChunk(fractStartPos);
     m_offsetEndtAudioPos = getOffsetAudioChunk(fractEndPos);
 }
