@@ -1,74 +1,94 @@
+﻿//////////////////////////////////////////////////////////////////////////////////////////
+//---------------------------ПОДКЛЮЧЕНИЕ ЗАГОЛОВОЧНЫХ ФАЙЛОВ----------------------------//
+//////////////////////////////////////////////////////////////////////////////////////////
 #include "stts.h"
 
-STTS::STTS(TRAK_TYPE type):
-    Atom(STTS_NAME, STTS_DIG_NAME),
-    m_trakType(type)
+//////////////////////////////////////////////////////////////////////////////////////////
+//---------------------------ОПРЕДЕЛЕНИЕ МЕТОДОВ----------------------------------------//
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//**************************************************************************************//
+//--------------------------------------------------------------------------------------//
+//---------------------------КЛАСС АТОМА STTS-------------------------------------------//
+//--------------------------------------------------------------------------------------//
+//**************************************************************************************//
+
+//**************************************************************************************//
+//------------конструктор---------------------------------------------------------------//
+STTS::STTS(TRAK_TYPE type) :
+	Atom(STTS_NAME, STTS_DIG_NAME),
+	m_trakType(type)
 {
 
 }
 
+//**************************************************************************************//
+//------------деконструктор-------------------------------------------------------------//
 STTS::~STTS()
 {
 
 }
 
+//**************************************************************************************//
+//------------парсинг структуры атома---------------------------------------------------//
 void STTS::parse(StreamReader &stream, uint32_t &startPos)
 {
-    printAtomName(LV6);
-    m_size = stream.readSizeAtom();
-    uint32_t pos = startPos+OFFSET_TITLE;
-    stream.setPos(pos);
-    m_verFlag = stream.readUInt32();
-    m_amount = stream.readBigEndianUInt32();
-    m_data.resize(m_amount);
-    for(auto i=0;i<m_amount;i++){
-        m_data[i].m_sampleCount=stream.readBigEndianUInt32();
-        m_data[i].m_sampleDelta=stream.readBigEndianUInt32();
-    }
-    if(m_trakType == TRAK_TYPE::VIDEO){
-       m_singletonSettings.setDeltaVideo(m_data[0].m_sampleDelta);
-    }else{
-        m_singletonSettings.setDeltaAudio(m_data[0].m_sampleDelta);
-    }
-    startPos +=m_size;
+	printAtomName(LV6);																	// вывод отступа и имени атома		
+	m_size = stream.readSizeAtom();														// чтение размера атома
+	uint32_t pos = startPos + OFFSET_TITLE;												// изменение позиции на следующий атома
+	stream.setPos(pos);																	// установка позиции в поток чтения
+	m_verFlag = stream.readUInt32();													// чтение Version и Flags
+	m_amount = stream.readBigEndianUInt32();											// чтение кол-ва данных STTS
+	m_data.resize(m_amount);															// изменение размера массива данных STTS
+	for (auto i = 0; i < m_amount; i++) {												// чтение массива данных STTS 
+		m_data[i].m_sampleCount = stream.readBigEndianUInt32();							// сохранение Sample count
+		m_data[i].m_sampleDelta = stream.readBigEndianUInt32();							// сохранение Sample delta
+	}
+	if (m_trakType == TRAK_TYPE::VIDEO) {												// если тип трека видео
+		m_singletonSettings.setDeltaVideo(m_data[0].m_sampleDelta);						// сохранение дельту видео
+	}
+	else {																				// если тип трека аудио
+		m_singletonSettings.setDeltaAudio(m_data[0].m_sampleDelta);						// сохранение дельту аудио
+	}
+	startPos += m_size;																	// изменение позиции на следующий атом
 }
 
+//**************************************************************************************//
+//------------обработка данных----------------------------------------------------------//
 void STTS::prepareData()
 {
-    if(m_trakType == TRAK_TYPE::VIDEO){
-        uint32_t begTime = m_singletonSettings.getIDBeginChunkVideo();
-        uint32_t endTime = m_singletonSettings.getEndTime();
-        uint32_t delta = m_singletonSettings.getDelta();
-        for(auto i=0;i<m_amount;i++){
-            m_data[i].m_sampleCount = (delta * endTime) + delta - begTime;
-            m_newAmountChunk = m_data[i].m_sampleCount;
-        }
-    }else{
-        for(auto i=0;i<m_amount;i++){
-            m_data[i].m_sampleCount = m_singletonSettings.getAmountChunkAudio();
-            m_newAmountChunk = m_data[i].m_sampleCount;
-        }
-    }
+	if (m_trakType == TRAK_TYPE::VIDEO) {												// если тип ВИДЕО
+		uint32_t begTime = m_singletonSettings.getIDBeginChunkVideo();					// сохранение времени начала обработки
+		uint32_t endTime = m_singletonSettings.getEndTime();							// сохранение времени конца обработки
+		uint32_t delta = m_singletonSettings.getDelta();								// сохранение дельты ключевого кадра
+		for (auto i = 0; i < m_amount; i++) {											// изменение массива данных STTS
+			m_data[i].m_sampleCount = (delta * endTime) + delta - begTime;				// изменение Sample count
+		}
+	}
+	else {																				// если тип АУДИО
+		for (auto i = 0; i < m_amount; i++) {
+			m_data[i].m_sampleCount = m_singletonSettings.getAmountChunkAudio();		// изменение Sample count
+		}
+	}
 }
 
+//**************************************************************************************//
+//------------изменение размера атома---------------------------------------------------//
 void STTS::resizeAtom(uint32_t size, DIRECT_RESIZE direction)
 {
 
 }
 
-uint32_t STTS::newAmountChunk() const
-{
-    return m_newAmountChunk;
-}
-
+//**************************************************************************************//
+//------------запись атома--------------------------------------------------------------//
 void STTS::writeAtom(StreamWriter &stream)
 {
-    stream.writeLitToBigEndian(m_size);
-    stream.writeAtomName(STTS_NAME);
-    stream.writeUInt32(m_verFlag);
-    stream.writeLitToBigEndian(m_amount);
-    for(int i=0;i<m_amount;i++){
-        stream.writeLitToBigEndian( m_data[i].m_sampleCount);
-        stream.writeLitToBigEndian( m_data[i].m_sampleDelta);
-    }
+	stream.writeLitToBigEndian(m_size);													// запись размера атома в BigEndian
+	stream.writeAtomName(STTS_NAME);													// запись названия атома
+	stream.writeUInt32(m_verFlag);														// запись Version и Flags														
+	stream.writeLitToBigEndian(m_amount);												// запись кол-ва массива данных STTS
+	for (int i = 0; i < m_amount; i++) {												// запись массива данных STTS
+		stream.writeLitToBigEndian(m_data[i].m_sampleCount);							// запись Sample count
+		stream.writeLitToBigEndian(m_data[i].m_sampleDelta);							// запись Sample delta
+	}
 }
