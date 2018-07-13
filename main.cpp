@@ -1,26 +1,31 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+//---------------------------ПОДКЛЮЧЕНИЕ ЗАГОЛОВОЧНЫХ ФАЙЛОВ----------------------------//
+//////////////////////////////////////////////////////////////////////////////////////////
 //#include <QCoreApplication>
 #include "mp4parser.h"
 #include "streamreader.h"
 #include "streamwriter.h"
 
-/// MVHD
+//////////////////////////////////////////////////////////////////////////////////////////
+//---------------------------ОСНОВНАЯ ФУНКЦИЯ MAIN--------------------------------------//
+//////////////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc, char *argv[])
 {
     //QCoreApplication a(argc, argv);
     //StreamReader reader("D:/asklab/video/video_2018_05_30_20-21-01.mp4");
-    StreamReader reader("D:/file_03_05_2015_23-27-38.mp4");
-    if (reader.openStream())
+    StreamReader reader("D:/file_03_05_2015_23-27-38.mp4");                             //задание пути к MP4 файлу
+    if (reader.openStream())                                                            //если MP4 файл успешно открылся
     {
-        MP4Parser parser;
-        parser.parse(reader);
-        parser.prepareData(0,899);
-        //parser.prepareData(450,630);
-        StreamWriter writer("D:/newfile.mp4");
-        if(writer.openStream()){
-            parser.writeOnlyVideo(reader,writer);
+        MP4Parser parser;                                                               //создание объекта MP4Parser
+        parser.parse(reader);                                                           //парсинг всех атомов MP4 файла
+        parser.prepareData(360,450);                                                    //подготовка данных MP4 файла к вырезанию указанного промежутка времени
+        //parser.prepareData(15,45);
+        StreamWriter writer("D:/newfile.mp4");                                          //задание пути к новому обрезанному MP4 файлу
+        if(writer.openStream()){                                                        //если новый MP4 файл открылся успешно на вывод
+            parser.writeOnlyVideo(reader,writer);                                       //идет запись в новый файл MP4 всех необходимых данных для создания обрезанного MP4
         }
     }
     system("pause");
-    return 0;//a.exec();
+    return 0;//a.exec();                                                                //завершение работы программы
 }
