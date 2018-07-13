@@ -36,8 +36,8 @@ void STSS::prepareData()
     if(m_trakType == TRAK_TYPE::VIDEO){
         m_deltaIFrame = m_singletonSettings.getDelta();
         uint32_t start = begTime*m_deltaIFrame;
-        uint32_t finish = (endTime*m_deltaIFrame)+m_deltaIFrame;
-        uint32_t startPos, endPos;
+        uint32_t finish = (endTime*m_deltaIFrame);
+        uint32_t startPos{0}, endPos{0};
         uint32_t countResize{0};
         for(uint32_t i=0;i<m_offsetIFrame.size();i++){
             if(start<m_offsetIFrame[i]){
@@ -61,7 +61,7 @@ void STSS::prepareData()
         m_singletonSettings.setIDBeginChunkVideo(m_startCutPos);
         countResize = m_offsetIFrame.size();
         if(endPos != (m_offsetIFrame.size()-1)){
-            m_offsetIFrame.erase(m_offsetIFrame.begin()+(endPos-startPos),m_offsetIFrame.end());
+            m_offsetIFrame.erase(m_offsetIFrame.begin()+(std::abs(static_cast<long>(endPos-startPos))),m_offsetIFrame.end());
         }
 
         uint32_t resizeAmount = (countResize-m_offsetIFrame.size())*BYTE32;

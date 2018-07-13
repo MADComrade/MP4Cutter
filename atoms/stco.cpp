@@ -35,7 +35,7 @@ void STCO::prepareData()
         uint32_t endTime = m_singletonSettings.getEndTime();
         uint32_t delta = m_singletonSettings.getDelta();
         m_singletonSettings.setArrayChunkOffsetVideo(m_chunkOffset);
-        uint32_t endPos = (endTime*delta)+delta;
+        uint32_t endPos = (endTime*delta);
         uint32_t countResize = m_chunkOffset.size() - endPos + begTime;
         m_startCutOffset = m_chunkOffset[begTime];
         m_singletonSettings.setBeginOffsetVideo(m_startCutOffset);
@@ -47,14 +47,6 @@ void STCO::prepareData()
         if(begTime > 0){
             m_chunkOffset.erase(m_chunkOffset.begin(),m_chunkOffset.begin()+begTime);
         }
-        //        uint32_t oldOffset = m_chunkOffset[0];
-        //        uint32_t tempOffset{0};
-        //        m_chunkOffset[0] = 40;
-        //        for(uint32_t i=1;i<m_chunkOffset.size();i++){
-        //            tempOffset = m_chunkOffset[i];
-        //            m_chunkOffset[i] =(m_chunkOffset[i] - oldOffset)+m_chunkOffset[i-1];
-        //            oldOffset = tempOffset;
-        //        }
         uint32_t resizeAmount = countResize*BYTE32; // ?
         m_size -=resizeAmount;
         resizeAtom(resizeAmount,DIRECT_RESIZE::DECREASED);

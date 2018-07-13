@@ -48,7 +48,7 @@ void STSZ::prepareData()
         uint32_t endTime = m_singletonSettings.getEndTime();
         uint32_t delta = m_singletonSettings.getDelta();
 
-        uint32_t endPos = (endTime*delta)+delta;
+        uint32_t endPos = (endTime*delta);
         uint32_t countResize = m_chunkSize.size();
         if(endPos != (m_chunkSize.size()-1)){
             m_chunkSize.erase(m_chunkSize.begin()+endPos,m_chunkSize.end());
