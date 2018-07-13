@@ -1,69 +1,92 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//---------------------------ПОДКЛЮЧЕНИЕ ЗАГОЛОВОЧНЫХ ФАЙЛОВ---------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "moov.h"
 #include "../interfaces/parserinterface.h"
 #include "../interfaces/callbackinterface.h"
 #include <memory>
 #include <iostream>
 
-using namespace std;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//---------------------------ОПРЕДЕЛЕНИЕ МЕТОДОВ---------------------------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//*******************************************************************************************************************//
+//-------------------------------------------------------------------------------------------------------------------//
+//---------------------------КЛАСС АТОМА MOOV------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------//
+//*******************************************************************************************************************//
+
+using namespace std;                                                                                                 //использование пространства имен STD
+
+//*******************************************************************************************************************//
+//------------конструктор--------------------------------------------------------------------------------------------//
 MOOV::MOOV():Atom(MOOV_NAME, MOOV_DIG_NAME)
 {
-    m_mvhd = make_unique<MVHD>();
-    m_videoTrak= make_unique<TRAK>();
-    m_audioTrak= make_unique<TRAK>();
-    m_videoTrak->setCallback(this);
-    m_audioTrak->setCallback(this);
-    m_parseMap[MVHD_NAME]=dynamic_cast<ParserInterface*>(m_mvhd.get());
-    m_parseMap[VIDE]=dynamic_cast<ParserInterface*>(m_videoTrak.get());
-    m_parseMap[SOUN]=dynamic_cast<ParserInterface*>(m_audioTrak.get());
+    m_mvhd = make_unique<MVHD>();                                                                                    //создание умного указателя unique_ptr на атом MVHD ???
+    m_videoTrak= make_unique<TRAK>();                                                                                //создание умного указателя unique_ptr на атом TRAK ???
+    m_audioTrak= make_unique<TRAK>();                                                                                //создание умного указателя unique_ptr на атом TRAK ???
+    m_videoTrak->setCallback(this);                                                                                  //создание возврата в m_videoTrak
+    m_audioTrak->setCallback(this);                                                                                  //создание возврата в m_audioTrak
+    m_parseMap[MVHD_NAME]=dynamic_cast<ParserInterface*>(m_mvhd.get());                                              //значение ключа MVHD_NAME в контейнере map - m_mvh
+    m_parseMap[VIDE]=dynamic_cast<ParserInterface*>(m_videoTrak.get());                                              //значение ключа VIDE в контейнере map - m_videoTrak
+    m_parseMap[SOUN]=dynamic_cast<ParserInterface*>(m_audioTrak.get());                                              //значение ключа SOUN в контейнере map - m_audioTrak
 }
 
+//*******************************************************************************************************************//
+//------------деконструктор------------------------------------------------------------------------------------------//
 MOOV::~MOOV()
 {
 
 }
 
+//*******************************************************************************************************************//
+//------------изменение размера атома--------------------------------------------------------------------------------//
 void MOOV::resizeAtom(uint32_t size, DIRECT_RESIZE direction)
 {
-    if(direction == DIRECT_RESIZE::INCREASED){
-        this->m_size +=size;
-    }else{
-        this->m_size -=size;
+    if(direction == DIRECT_RESIZE::INCREASED){                                                                       //если размер атома увеличился
+        this->m_size +=size;                                                                                         //увеличение размера атома
+    }else{                                                                                                           //если размер атома уменьшился
+        this->m_size -=size;                                                                                         //уменьшение размера атома
     }
 }
 
+//*******************************************************************************************************************//
+//------------парсинг атома MOOV-------------------------------------------------------------------------------------//
 void MOOV::parse(StreamReader &stream, uint32_t& startPos)
 {
-    if(stream.getTitleAtom()==MOOV_NAME){
-        printAtomName(LV1);
-        m_offset = startPos;
-        m_size = stream.readSizeAtom();
-        uint32_t foundPos = startPos+OFFSET_TITLE;
-        uint32_t atomSize{0}; //??
+    if(stream.getTitleAtom()==MOOV_NAME){                                                                            //если название атома совпадает с moov
+        printAtomName(LV1);                                                                                          //вывод названия атома с определненным выравниванием(lv)
+        m_offset = startPos;                                                                                         //присваивание переменной m_offset значения текущей начальной позиции в файле startPos
+        m_size = stream.readSizeAtom();                                                                              //размер чанка атома в памяти(?)
+        uint32_t foundPos = startPos+OFFSET_TITLE;                                                                   //присваивание переменной foundPos значения позиции в файле, указывающей на данные атома(потому что к переменной текущей начальной позиции файла startPos прибавилось значение 8 байт(размера size и размера названия атома))
+        uint32_t atomSize{0};                                                                                        //задана беззнаковая переменная atomSize=0(???), 4 байтная
         string titleName;
-        while (foundPos<(m_size+startPos)) {
-            stream.setPos(foundPos);
-            atomSize = stream.readSizeAtom(); //??
-            titleName =stream.getTitleAtom();
-            if(titleName==TRAK_NAME){
-                stream.setPos(foundPos+156);
-                titleName = stream.getDataInAtom();
-                stream.setPos(foundPos);
-                std::cout<<"=======\n"<<titleName.c_str()<<"\n======="<<std::endl;
+        while (foundPos<(m_size+startPos)) {                                                                         //пока значение позиции в файле foundPos, указывающей на данные атома, меньше, чем (размер чанка атома в памяти + текущая начальная позиция в атоме startPos)
+            stream.setPos(foundPos);                                                                                 //перемещение указателя файла на значение foundPos
+            atomSize = stream.readSizeAtom();                                                                        //размер чанка атома в памяти
+            titleName =stream.getTitleAtom();                                                                        //получение заголовка атома
+            if(titleName==TRAK_NAME){                                                                                //если заголовок атома совпадает с TRAK
+                stream.setPos(foundPos+156);                                                                         //установить значение позиции в файле foundPos+156 (156, т.к. размер атомов фиксированный, и получается переход в атом hdlr и чтение значения, что именно у нас: видео или аудио) ???
+                titleName = stream.getDataInAtom();                                                                  //чтение 4 байт типа в атоме hdlr (в значении Handler type: soun или vide, т.е. аудио или видео) ???
+                stream.setPos(foundPos);                                                                             //снова устанавливается значение позиции в файле foundPos
+                std::cout<<"=======\n"<<titleName.c_str()<<"\n======="<<std::endl;                                   //вывод типа файла: аудио или видео
             }
-            auto search = m_parseMap.find(titleName);
-            if(search != m_parseMap.end()){
-                m_parseMap.at(titleName)->parse(stream, foundPos);                
+            auto search = m_parseMap.find(titleName);                                                                //в контейнере map "ключ-значение" m_parseMap ищем по ключу titleName его значение
+            if(search != m_parseMap.end()){                                                                          //проверка, не указывает ли search на конец контейнера map(то есть что ключа titleName нет в контейнере, как, соответственно, и его значения)
+                m_parseMap.at(titleName)->parse(stream, foundPos);                                                   //если искомый ключ и его значение есть в контейнере map, то обращаемся к значению ключа и распарсиваем его(например, если ключ vide, то его значением в контейнере map будет m_videoTrak(как указано в строке m_parseMap[VIDE]=dynamic_cast<ParserInterface*>(m_videoTrak.get());), и соответственно по вызову m_videoTrak.get() в заголовочном файде moov.h по указателю unique_ptr приходим к атому TRAK и парсим уже его)
             }else{
-                foundPos += atomSize;
+                foundPos += atomSize;                                                                                //если искомого ключа и его значения нету в контейнере map, то к позиции атома foundPos прибавляем размер чанка атома atomSize
             }
         }
     }else{
-        exit(-2);
+        exit(-2);                                                                                                    //иначе выход с кодом ошибки
     }
-    startPos += m_size;
+    startPos += m_size;                                                                                              //значение начальной позиции startPos увеличиваем на размер чанка атома m_size
 }
 
+//*******************************************************************************************************************//
+//------------обработка данных---------------------------------------------------------------------------------------//
 std::pair<uint32_t, uint32_t> MOOV::prepareData(uint32_t begTime, uint32_t endTime)
 {
     m_singletonSettings.setPeriodTime(begTime,endTime);
@@ -73,6 +96,8 @@ std::pair<uint32_t, uint32_t> MOOV::prepareData(uint32_t begTime, uint32_t endTi
     return std::pair<uint32_t, uint32_t>(m_singletonSettings.getBeginOffsetFile(),m_singletonSettings.getSizeCut());
 }
 
+//*******************************************************************************************************************//
+//------------запись аудио и видео-----------------------------------------------------------------------------------//
 void MOOV::writeAudioAndVideo(StreamWriter &outStream)
 {
     //m_size -=m_videoTrak->size();
