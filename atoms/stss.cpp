@@ -73,20 +73,12 @@ void STSS::prepareData()
     }
 }
 
-uint32_t STSS::getDeltaIFrame() const
-{
-    return m_deltaIFrame;
-}
 
 void STSS::resizeAtom(uint32_t size, DIRECT_RESIZE direction)
 {
     callback()->resizeAtom(size,direction);
 }
 
-uint32_t STSS::startCutPos() const
-{
-    return m_startCutPos;
-}
 
 void STSS::writeAtom(StreamWriter &stream)
 {

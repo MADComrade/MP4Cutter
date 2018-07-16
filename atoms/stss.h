@@ -10,8 +10,6 @@ public:
     ~STSS();
     virtual void parse(StreamReader& stream, uint32_t& startPos);
     void prepareData();
-    uint32_t getDeltaIFrame() const;
-    uint32_t startCutPos() const;
     virtual void writeAtom(StreamWriter& stream);
 protected:
     virtual void resizeAtom(uint32_t size, DIRECT_RESIZE direction);
