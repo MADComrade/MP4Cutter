@@ -100,8 +100,6 @@ std::pair<uint32_t, uint32_t> MOOV::prepareData(uint32_t begTime, uint32_t endTi
 //------------запись аудио и видео-----------------------------------------------------------------------------------//
 void MOOV::writeAudioAndVideo(StreamWriter &outStream)
 {
-    //m_size -=m_videoTrak->size();
-    m_mvhd->setNextTrakID(2);
     outStream.writeLitToBigEndian(m_size);
     outStream.writeAtomName(MOOV_NAME);
     m_mvhd->writeAtom(outStream);
